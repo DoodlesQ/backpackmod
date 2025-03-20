@@ -1,0 +1,34 @@
+{
+	"variants": {
+		"facing=north,spool=false": {
+			"model": "improvedbackpacks:block/sewing_table_empty"
+		},
+		"facing=north,spool=true": {
+			"model": "improvedbackpacks:block/sewing_table"
+		},
+		"facing=east,spool=false": {
+			"model": "improvedbackpacks:block/sewing_table_empty",
+			"y": 90
+		},
+		"facing=east,spool=true": {
+			"model": "improvedbackpacks:block/sewing_table",
+			"y": 90
+		},
+		"facing=south,spool=false": {
+			"model": "improvedbackpacks:block/sewing_table_empty",
+			"y": 180
+		},
+		"facing=south,spool=true": {
+			"model": "improvedbackpacks:block/sewing_table",
+			"y": 180
+		},
+		"facing=west,spool=false": {
+			"model": "improvedbackpacks:block/sewing_table_empty",
+			"y": 270
+		},
+		"facing=west,spool=true": {
+			"model": "improvedbackpacks:block/sewing_table",
+			"y": 270
+		}
+	}
+}
