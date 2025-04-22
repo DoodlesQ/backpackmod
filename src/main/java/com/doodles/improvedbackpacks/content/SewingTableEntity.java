@@ -42,10 +42,9 @@ public class SewingTableEntity extends BlockEntity {
 	private static Boolean shears = false;
 	
     // Item Storage
-    private final ItemStackHandler inputs = createItemHandler(4);
-    private final ItemStackHandler result = createItemHandler(1);
+    private final ItemStackHandler items = createItemHandler(5);
     // Capability for Item Storage
-    /*
+    ///*
     private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> new WItemHandler(items) {
     	// Disable item automation
     	@Override
@@ -53,8 +52,8 @@ public class SewingTableEntity extends BlockEntity {
         @Override
         public ItemStack extractItem(int _0, int _1, boolean _2) { return ItemStack.EMPTY; }
     });
-    */
-    //*
+    //*/
+    /*
     private final LazyOptional<IItemHandler> inputItemHandler = LazyOptional.of(() -> new WItemHandler(inputs) {
     	// Disable item automation
     	@Override
@@ -79,20 +78,23 @@ public class SewingTableEntity extends BlockEntity {
     // Define ability for other mods to access Item Capability
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction dir) {
+    	//return super.getCapability(cap, dir);
+    	///*
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return inputItemHandler.cast();
+            return itemHandler.cast();
         } else {
             return super.getCapability(cap, dir);
         }
+        //*/
     }
     
 	// Destroy Capability when block is destroyed
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
-        //itemHandler.invalidate();
-        inputItemHandler.invalidate();
-        resultItemHandler.invalidate();
+        itemHandler.invalidate();
+        //inputItemHandler.invalidate();
+        //resultItemHandler.invalidate();
     }
 
     // Item Storage Handler
@@ -107,27 +109,30 @@ public class SewingTableEntity extends BlockEntity {
         };
     }
     public ItemStackHandler getItems() {
+    	return items;
+    	/*
         ItemStackHandler items = createItemHandler(5);
     	for (int i = 0; i < 4; i++) {
     		items.setStackInSlot(i, inputs.getStackInSlot(i));
     	}
     	items.setStackInSlot(4, result.getStackInSlot(0));
     	return items;
+    	*/
     }
+    /*
     public void setItems(ItemStackHandler items) {
     	for (int i = 0; i < 4; i++) {
     		inputs.setStackInSlot(i, items.getStackInSlot(i));
     	}
     	result.setStackInSlot(0, items.getStackInSlot(4));
     }
-    public ItemStackHandler getInput() { return inputs; }
-    public ItemStackHandler getResult() { return result; }
+    */
     
     // Save & Load Inventory Data
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        ItemStackHandler items = this.getItems();
+        //ItemStackHandler items = this.getItems();
         tag.put(ITEMS_TAG, items.serializeNBT());
         tag.putBoolean(SPOOL_TAG, spool);
         tag.putBoolean(SHEARS_TAG, shears);
@@ -136,9 +141,9 @@ public class SewingTableEntity extends BlockEntity {
     public void load(CompoundTag tag) {
         super.load(tag);
         if (tag.contains(ITEMS_TAG)) {
-            ItemStackHandler items = createItemHandler(5);
+            //ItemStackHandler items = createItemHandler(5);
         	items.deserializeNBT(tag.getCompound(ITEMS_TAG));
-        	this.setItems(items);
+        	//this.setItems(items);
         }
         if (tag.contains(SPOOL_TAG)) { spool = tag.getBoolean(SPOOL_TAG); }
         if (tag.contains(SHEARS_TAG)) { shears = tag.getBoolean(SHEARS_TAG); }

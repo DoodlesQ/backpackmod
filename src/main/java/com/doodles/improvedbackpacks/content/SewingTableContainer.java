@@ -40,7 +40,7 @@ import net.minecraftforge.items.SlotItemHandler;
 public class SewingTableContainer extends AbstractContainerMenu {
     private final Player player;
     private final ContainerLevelAccess access;
-    private final List<SewingRecipe> recipes;
+    //private final List<SewingRecipe> recipes;
 
 	// Constuctor
 	public SewingTableContainer(int containerId, Player player, BlockPos pos) {
@@ -50,33 +50,31 @@ public class SewingTableContainer extends AbstractContainerMenu {
 		super(ImprovedBackpacks.SEWING_TABLE_MENU.get(), containerId);
 		this.player = player;
 		this.access = access;
-		this.recipes = this.player.level().getRecipeManager().getAllRecipesFor(ImprovedBackpacks.SEWING_RECIPE_TYPE.get());
+		//this.recipes = this.player.level().getRecipeManager().getAllRecipesFor(ImprovedBackpacks.SEWING_RECIPE_TYPE.get());
 		
         if (player.level().getBlockEntity(pos) instanceof SewingTableEntity table) {
-			this.addSlot(new SlotItemHandler(table.getInput(), 0, 20, 24) {
+			this.addSlot(new SlotItemHandler(table.getItems(), 0, 20, 24) {
 				public boolean mayPlace(ItemStack item) {
 					return item.is(ImprovedBackpacks.SEWING_SPOOL.get());
 				}
 			});
-			this.addSlot(new SlotItemHandler(table.getInput(), 1, 20, 47) {
+			this.addSlot(new SlotItemHandler(table.getItems(), 1, 20, 47) {
 				public boolean mayPlace(ItemStack item) {
 					return item.is(Items.SHEARS);
 				}
 			});
-			this.addSlot(new SlotItemHandler(table.getInput(), 2, 42, 35) {
+			this.addSlot(new SlotItemHandler(table.getItems(), 2, 42, 35) {
 				public boolean mayPlace(ItemStack item) { return true; }
 			});
-			this.addSlot(new SlotItemHandler(table.getInput(), 3, 87, 35) {
+			this.addSlot(new SlotItemHandler(table.getItems(), 3, 87, 35) {
 				public boolean mayPlace(ItemStack item) { return true; }
 			});
-			this.addSlot(new SlotItemHandler(table.getResult(), 0, 141, 35) {
+			this.addSlot(new SlotItemHandler(table.getItems(), 0, 141, 35) {
 				// Deny Placement in Slot
 				public boolean mayPlace(ItemStack stack) { return false; }
 				
 				public void onTake(Player player, ItemStack stack) {
-					ItemStackHandler i = table.getInput();
-					i.setStackInSlot(2, ItemStack.EMPTY);
-					i.setStackInSlot(3, ItemStack.EMPTY);
+					ItemStackHandler i = table.getItems();
 					i.extractItem(0, 1, false);
 					i.getStackInSlot(1).hurt(1, RandomSource.create(), null);
 				}
@@ -103,7 +101,8 @@ public class SewingTableContainer extends AbstractContainerMenu {
     protected static void slotsChangedCraft(SewingTableContainer menu, Level level, Player player, Container inventory) {
     	if (!level.isClientSide) {
     		//ServerPlayer splayer = (ServerPlayer)player;
-    		for (SewingRecipe r : menu.recipes) {
+    		List<SewingRecipe> recipes = level.getRecipeManager().getRecipesFor(ImprovedBackpacks.SEWING_RECIPE_TYPE.get(), inventory, level);
+    		for (SewingRecipe r : recipes) {
     			if (r.matches(inventory, level)) {
     				ItemStack result = r.getResultItem(level.registryAccess());
     				inventory.setItem(4, result);

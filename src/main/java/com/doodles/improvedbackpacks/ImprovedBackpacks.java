@@ -81,8 +81,8 @@ public class ImprovedBackpacks
 	public static final RegistryObject<MenuType<SewingTableContainer>> SEWING_TABLE_MENU = MENU_TYPES.register("sewing_table",
 			() -> IForgeMenuType.create((windowid, inv, data) -> new SewingTableContainer(windowid, inv.player, data.readBlockPos()))
 	);
-	public static final RegistryObject<RecipeType<SewingRecipe>> SEWING_RECIPE_TYPE = RECIPE_TYPES.register("sewing", () -> RecipeType.simple(ImprovedBackpacks.SEWING_RECIPE_TYPE.getId()));
-	public static final RegistryObject<RecipeSerializer<SewingRecipe>> SEWING_RECIPE_JSON = RECIPE_JSONS.register("sewing", SewingRecipeSerializer::new);
+	public static final RegistryObject<RecipeType<SewingRecipe>> SEWING_RECIPE_TYPE = RECIPE_TYPES.register("sewingtype", () -> RecipeType.simple(ImprovedBackpacks.SEWING_RECIPE_TYPE.getId()));
+	public static final RegistryObject<RecipeSerializer<SewingRecipe>> SEWING_RECIPE_JSON = RECIPE_JSONS.register("sewingjson", SewingRecipeSerializer::new);
     
     // Sewing Spool
     public static final RegistryObject<Item> SEWING_SPOOL = ITEMS.register("spool", () -> new Item(new Item.Properties()));
@@ -121,7 +121,6 @@ public class ImprovedBackpacks
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-    	LOGGER.debug("IB::RecipeTypeRegistry00");
     }
 
     @SubscribeEvent
