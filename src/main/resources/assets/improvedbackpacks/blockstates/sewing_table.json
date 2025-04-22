@@ -1,32 +1,62 @@
 {
 	"variants": {
-		"facing=north,spool=false": {
+		"facing=north,spool=false,shears=false": {
 			"model": "improvedbackpacks:block/sewing_table_empty"
 		},
-		"facing=north,spool=true": {
-			"model": "improvedbackpacks:block/sewing_table"
+		"facing=north,spool=true,shears=false": {
+			"model": "improvedbackpacks:block/sewing_table_spool"
 		},
-		"facing=east,spool=false": {
+		"facing=east,spool=false,shears=false": {
 			"model": "improvedbackpacks:block/sewing_table_empty",
 			"y": 90
 		},
-		"facing=east,spool=true": {
-			"model": "improvedbackpacks:block/sewing_table",
+		"facing=east,spool=true,shears=false": {
+			"model": "improvedbackpacks:block/sewing_table_spool",
 			"y": 90
 		},
-		"facing=south,spool=false": {
+		"facing=south,spool=false,shears=false": {
 			"model": "improvedbackpacks:block/sewing_table_empty",
 			"y": 180
 		},
-		"facing=south,spool=true": {
-			"model": "improvedbackpacks:block/sewing_table",
+		"facing=south,spool=true,shears=false": {
+			"model": "improvedbackpacks:block/sewing_table_spool",
 			"y": 180
 		},
-		"facing=west,spool=false": {
+		"facing=west,spool=false,shears=false": {
 			"model": "improvedbackpacks:block/sewing_table_empty",
 			"y": 270
 		},
-		"facing=west,spool=true": {
+		"facing=west,spool=true,shears=false": {
+			"model": "improvedbackpacks:block/sewing_table_spool",
+			"y": 270
+		},
+		"facing=north,spool=false,shears=true": {
+			"model": "improvedbackpacks:block/sewing_table_shears"
+		},
+		"facing=north,spool=true,shears=true": {
+			"model": "improvedbackpacks:block/sewing_table"
+		},
+		"facing=east,spool=false,shears=true": {
+			"model": "improvedbackpacks:block/sewing_table_shears",
+			"y": 90
+		},
+		"facing=east,spool=true,shears=true": {
+			"model": "improvedbackpacks:block/sewing_table",
+			"y": 90
+		},
+		"facing=south,spool=false,shears=true": {
+			"model": "improvedbackpacks:block/sewing_table_shears",
+			"y": 180
+		},
+		"facing=south,spool=true,shears=true": {
+			"model": "improvedbackpacks:block/sewing_table",
+			"y": 180
+		},
+		"facing=west,spool=false,shears=true": {
+			"model": "improvedbackpacks:block/sewing_table_shears",
+			"y": 270
+		},
+		"facing=west,spool=true,shears=true": {
 			"model": "improvedbackpacks:block/sewing_table",
 			"y": 270
 		}

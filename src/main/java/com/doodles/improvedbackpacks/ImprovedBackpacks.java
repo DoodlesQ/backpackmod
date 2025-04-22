@@ -1,9 +1,12 @@
 package com.doodles.improvedbackpacks;
 
-import com.doodles.improvedbackpacks.blockentities.SewingTableEntity;
-import com.doodles.improvedbackpacks.blocks.SewingTable;
-import com.doodles.improvedbackpacks.menus.SewingTableMenu;
-import com.doodles.improvedbackpacks.menus.SewingTableScreen;
+import com.doodles.improvedbackpacks.content.SewingTableEntity;
+import com.doodles.improvedbackpacks.content.SewingTableBlock;
+import com.doodles.improvedbackpacks.content.SewingTableContainer;
+import com.doodles.improvedbackpacks.content.SewingTableScreen;
+import com.doodles.improvedbackpacks.recipe.SewingRecipe;
+import com.doodles.improvedbackpacks.recipe.SewingRecipeSerializer;
+import com.doodles.improvedbackpacks.recipe.SewingRecipeType;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -15,6 +18,10 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.CampfireCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SimpleCookingSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -25,6 +32,7 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -38,6 +46,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.function.Supplier;
+
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -53,26 +64,32 @@ public class ImprovedBackpacks
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
 	public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, MODID);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_JSONS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MODID);
 
     // Register Sewing Table
-    public static final RegistryObject<SewingTable> SEWING_TABLE = BLOCKS.register("sewing_table", () -> new SewingTable(BlockBehaviour.Properties.of()
-    		.strength(2.5F)
+    public static final RegistryObject<SewingTableBlock> SEWING_TABLE = BLOCKS.register("sewing_table", () -> new SewingTableBlock(BlockBehaviour.Properties.of()
+    		.destroyTime(2.5F)
     		.sound(SoundType.WOOD)
     		.mapColor(MapColor.WOOD)
     		.instrument(NoteBlockInstrument.BASS)
-    		.ignitedByLava()
     		));
     public static final RegistryObject<Item> SEWING_TABLE_ITEM = ITEMS.register("sewing_table", () -> new BlockItem(SEWING_TABLE.get(), new Item.Properties()));
-    public static final RegistryObject<BlockEntityType<SewingTableEntity>> SEWING_TABLE_ENTITY = BLOCK_ENTITY_TYPES.register("sewing_table_entity", () -> BlockEntityType.Builder.of(SewingTableEntity::new, SEWING_TABLE.get()).build(null));
-
-	public static final RegistryObject<MenuType<SewingTableMenu>> SEWING_TABLE_MENU = MENU_TYPES.register("sewing_table_menu", () -> new MenuType<>(SewingTableMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final RegistryObject<BlockEntityType<SewingTableEntity>> SEWING_TABLE_ENTITY = BLOCK_ENTITY_TYPES.register("sewing_table",
+    		() -> BlockEntityType.Builder.of(SewingTableEntity::new, SEWING_TABLE.get()).build(null)
+	);
+	public static final RegistryObject<MenuType<SewingTableContainer>> SEWING_TABLE_MENU = MENU_TYPES.register("sewing_table",
+			() -> IForgeMenuType.create((windowid, inv, data) -> new SewingTableContainer(windowid, inv.player, data.readBlockPos()))
+	);
+	public static final RegistryObject<RecipeType<SewingRecipe>> SEWING_RECIPE_TYPE = RECIPE_TYPES.register("sewing", () -> RecipeType.simple(ImprovedBackpacks.SEWING_RECIPE_TYPE.getId()));
+	public static final RegistryObject<RecipeSerializer<SewingRecipe>> SEWING_RECIPE_JSON = RECIPE_JSONS.register("sewing", SewingRecipeSerializer::new);
     
-    // Example Item
+    // Sewing Spool
     public static final RegistryObject<Item> SEWING_SPOOL = ITEMS.register("spool", () -> new Item(new Item.Properties()));
 
     // Add Items to Creative Tab
     public static final RegistryObject<CreativeModeTab> BACKPACK_TAB = CREATIVE_MODE_TABS.register("backpack_tab", () -> CreativeModeTab.builder()
-			.title(Component.translatable("item_group." + MODID + ".backpack_tab"))
+			.title(Component.translatable("itemGroup." + MODID + ".backpack_tab"))
             .icon(() -> SEWING_TABLE_ITEM.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(SEWING_TABLE_ITEM.get());
@@ -104,41 +121,23 @@ public class ImprovedBackpacks
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        // Some common setup code
-        //LOGGER.info("HELLO FROM COMMON SETUP");
-
-        //if (Config.logDirtBlock)
-        //    LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
-
-        LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
-
-        //Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
+    	LOGGER.debug("IB::RecipeTypeRegistry00");
     }
-	private void clientSetup(FMLClientSetupEvent event) {
-	}
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
-        // Do something when the server starts
-        //LOGGER.info("Improved Backpacks");
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
-        {
-            // Some client setup code
-            //LOGGER.info("HELLO FROM CLIENT SETUP");
-            //LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
-        	
+        {        	
         	event.enqueueWork(
         		// Register Screens
-    	        () -> MenuScreens.register(SEWING_TABLE_MENU.get(), SewingTableScreen::new)
+    	        () -> MenuScreens.register(ImprovedBackpacks.SEWING_TABLE_MENU.get(), SewingTableScreen::new)
     	    );
         }
     }
