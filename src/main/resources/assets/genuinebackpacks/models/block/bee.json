@@ -1,0 +1,6 @@
+{
+	"parent": "genuinebackpacks:block/backpack",
+	"textures": {
+		"cloth": "genuinebackpacks:block/bee"
+	}
+}

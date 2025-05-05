@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "genuinebackpacks:item/backpack_color_open",
+    "layer1": "genuinebackpacks:item/backpack_open"
+  }
+}

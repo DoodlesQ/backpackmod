@@ -1,0 +1,18 @@
+{
+  "type": "genuinebackpacks:sewing",
+  "counts": [
+    1,
+    1
+  ],
+  "items": [
+    {
+      "item": "genuinebackpacks:tanned_leather"
+    },
+    {
+      "tag": "forge:ingots/iron"
+    }
+  ],
+  "result": {
+    "item": "genuinebackpacks:tiny_pocket"
+  }
+}

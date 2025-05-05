@@ -1,0 +1,41 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "genuinebackpacks:item/backpack_color",
+		"layer1": "genuinebackpacks:item/backpack"
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"genuinebackpacks:backpack_open": 1.0
+			},
+			"model": "genuinebackpacks:item/backpack_open"
+		},
+		{
+			"predicate": {
+				"genuinebackpacks:easter_egg": 1.0
+			},
+			"model": "genuinebackpacks:item/easter_egg"
+		},
+		{
+			"predicate": {
+				"genuinebackpacks:easter_egg": 1.0,
+				"genuinebackpacks:backpack_open": 1.0
+			},
+			"model": "genuinebackpacks:item/easter_egg_open"
+		},
+		{
+			"predicate": {
+				"genuinebackpacks:easter_egg": 2.0
+			},
+			"model": "genuinebackpacks:item/bee"
+		},
+		{
+			"predicate": {
+				"genuinebackpacks:easter_egg": 2.0,
+				"genuinebackpacks:backpack_open": 1.0
+			},
+			"model": "genuinebackpacks:item/bee_open"
+		}
+	]
+}

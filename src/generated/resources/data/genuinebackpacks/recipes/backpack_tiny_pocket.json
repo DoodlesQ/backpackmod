@@ -1,0 +1,19 @@
+{
+  "type": "genuinebackpacks:sewing",
+  "counts": [
+    1,
+    1
+  ],
+  "items": [
+    {
+      "item": "genuinebackpacks:backpack"
+    },
+    {
+      "item": "genuinebackpacks:tiny_pocket"
+    }
+  ],
+  "pockets": 1,
+  "result": {
+    "item": "genuinebackpacks:backpack"
+  }
+}

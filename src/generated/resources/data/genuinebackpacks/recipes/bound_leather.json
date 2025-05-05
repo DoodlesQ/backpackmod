@@ -1,0 +1,14 @@
+{
+  "type": "genuinebackpacks:sewing",
+  "counts": [
+    1
+  ],
+  "items": [
+    {
+      "item": "minecraft:leather"
+    }
+  ],
+  "result": {
+    "item": "genuinebackpacks:bound_leather"
+  }
+}

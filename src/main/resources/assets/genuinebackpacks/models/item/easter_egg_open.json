@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "genuinebackpacks:item/easter_egg_open"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "genuinebackpacks",
+  "key": {
+    "s": {
+      "tag": "forge:rods/wooden"
+    },
+    "t": {
+      "tag": "forge:string"
+    }
+  },
+  "pattern": [
+    " s",
+    " t",
+    " s"
+  ],
+  "result": {
+    "item": "genuinebackpacks:spool"
+  },
+  "show_notification": true
+}

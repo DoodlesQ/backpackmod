@@ -43,12 +43,14 @@ public class Config
     public static String magicNumberIntroduction;
     public static Set<Item> items;
 
-    private static boolean validateItemName(final Object obj)
+    @SuppressWarnings("deprecation")
+	private static boolean validateItemName(final Object obj)
     {
         return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(new ResourceLocation(itemName));
     }
 
-    @SubscribeEvent
+    @SuppressWarnings("deprecation")
+	@SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
         logDirtBlock = LOG_DIRT_BLOCK.get();

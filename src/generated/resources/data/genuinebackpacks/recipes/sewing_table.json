@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "genuinebackpacks",
+  "key": {
+    "l": {
+      "item": "minecraft:leather"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    },
+    "w": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "sl",
+    "ww",
+    "ww"
+  ],
+  "result": {
+    "item": "genuinebackpacks:sewing_table"
+  },
+  "show_notification": true
+}

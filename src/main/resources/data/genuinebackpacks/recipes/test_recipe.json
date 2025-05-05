@@ -1,9 +1,9 @@
 {
   "type": "genuinebackpacks:sewing",
   "items": [
-	{ "item": "minecraft:wool" },
+	{ "item": "minecraft:brown_wool" },
 	{ "item": "minecraft:string" }
   ],
   "counts": [ 5, 2 ],
-  "result": "minecraft:leather"
+  "result": { "item": "minecraft:leather" }
 }

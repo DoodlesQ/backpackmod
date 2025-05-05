@@ -1,0 +1,19 @@
+{
+  "type": "genuinebackpacks:sewing",
+  "counts": [
+    5,
+    3
+  ],
+  "items": [
+    {
+      "item": "genuinebackpacks:tanned_leather"
+    },
+    {
+      "item": "minecraft:green_wool"
+    }
+  ],
+  "packColor": 6192150,
+  "result": {
+    "item": "genuinebackpacks:backpack"
+  }
+}

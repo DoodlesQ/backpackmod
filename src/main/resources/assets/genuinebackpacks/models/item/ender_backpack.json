@@ -1,0 +1,14 @@
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "genuinebackpacks:item/ender_backpack"
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"genuinebackpacks:backpack_open": 1.0
+			},
+			"model": "genuinebackpacks:item/ender_backpack_open"
+		}
+	]
+}

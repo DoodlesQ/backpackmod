@@ -1,0 +1,6 @@
+{
+	"parent": "genuinebackpacks:block/backpack_mounted",
+	"textures": {
+		"cloth": "genuinebackpacks:block/easter_egg"
+	}
+}
