@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "genuinebackpacks",
+  "group": "spool_of_thread",
   "key": {
     "s": {
       "tag": "forge:rods/wooden"

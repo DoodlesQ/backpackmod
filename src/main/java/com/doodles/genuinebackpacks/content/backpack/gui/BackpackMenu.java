@@ -1,8 +1,10 @@
-package com.doodles.genuinebackpacks.content.backpack;
+package com.doodles.genuinebackpacks.content.backpack.gui;
 
 import com.doodles.genuinebackpacks.GenuineBackpacks;
+import com.doodles.genuinebackpacks.content.backpack.BackpackItem;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -24,7 +26,7 @@ public class BackpackMenu extends AbstractContainerMenu {
 	public BackpackMenu(int id, Player player, ItemStack backpack) {
 		this(id, player, backpack, ContainerLevelAccess.NULL);
 	}
-	protected BackpackMenu(int id, Player player, ItemStack backpack, ContainerLevelAccess access) {
+	public BackpackMenu(int id, Player player, ItemStack backpack, ContainerLevelAccess access) {
 		super(GenuineBackpacks.BACKPACK_MENU.get(), id);
 		
 		this.access = access;
@@ -62,6 +64,8 @@ public class BackpackMenu extends AbstractContainerMenu {
 			}
 			this.addSlot(slot);
 		}
+		
+		player.level().playSound(player, player.getOnPos(), GenuineBackpacks.BACKPACK_OPEN_SOUND.get(), SoundSource.PLAYERS);
 	}
 
 	@Override
@@ -108,6 +112,7 @@ public class BackpackMenu extends AbstractContainerMenu {
     public void removed(Player player) {
 		CompoundTag tag = this.backpack.getOrCreateTagElement("display");
 		tag.putBoolean("open", false);
+		player.level().playSound(player, player.getOnPos(), GenuineBackpacks.BACKPACK_CLOSE_SOUND.get(), SoundSource.PLAYERS);
 		super.removed(player);
     }
 }

@@ -22,5 +22,10 @@
   "item.genuinebackpacks.tanned_leather": "Tanned Leather",
   "item.genuinebackpacks.tiny_pocket": "Tiny Pocket",
   "itemGroup.genuinebackpacks.backpack_tab": "Genuine Backpacks",
-  "key.genuinebackpacks.backpack": "Open Backpack"
+  "key.genuinebackpacks.backpack": "Open Backpack",
+  "subtitles.genuinebackpacks.block.sewing_table": "Sewing Table used",
+  "subtitles.genuinebackpacks.item.backpack_close": "Backpack closed",
+  "subtitles.genuinebackpacks.item.backpack_open": "Backpack opened",
+  "subtitles.genuinebackpacks.item.ender_ackpack_open": "Ender Backpack opened",
+  "subtitles.genuinebackpacks.item.ender_backpack_close": "Ender Backpack closed"
 }

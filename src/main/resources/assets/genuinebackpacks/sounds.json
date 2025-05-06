@@ -1,0 +1,32 @@
+{
+	"sewing_table": {
+		"sounds": [
+			"genuinebackpacks:sewing_table"
+		],
+		"subtitle": "subtitle.genuinebackpacks.block.sewing_table"
+	},
+	"backpack_open": {
+		"sounds": [
+			"genuinebackpacks:backpack_open"
+		],
+		"subtitle": "subtitle.genuinebackpacks.item.backpack_open"
+	},
+	"backpack_close": {
+		"sounds": [
+			"genuinebackpacks:backpack_close"
+		],
+		"subtitle": "subtitle.genuinebackpacks.item.backpack_close"
+	},
+	"ender_backpack_open": {
+		"sounds": [
+			"genuinebackpacks:ender_backpack_open"
+		],
+		"subtitle": "subtitle.genuinebackpacks.item.ender_backpack_open"
+	},
+	"ender_backpack_close": {
+		"sounds": [
+			"genuinebackpacks:ender_backpack_close"
+		],
+		"subtitle": "subtitle.genuinebackpacks.item.ender_backpack_close"
+	}
+}

@@ -9,7 +9,8 @@ import com.doodles.genuinebackpacks.recipe.SewingRecipe;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -23,16 +24,11 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-// TODO:
-//
-// Ask if shear damage is bad code
-// Ask if slotsChanged is bad code
-
 public class SewingTableMenu extends AbstractContainerMenu {
     private final Player player;
     private final ContainerLevelAccess access;
     private final SewingTableTileEntity table;
-    
+    private final BlockPos pos;
     private SewingRecipe recipe;
 
 	// Constuctor
@@ -43,11 +39,12 @@ public class SewingTableMenu extends AbstractContainerMenu {
 		super(GenuineBackpacks.SEWING_TABLE_MENU.get(), containerId);
 		this.player = player;
 		this.access = access;
+		this.pos = pos;
 		this.recipe = null;
 		
         if (player.level().getBlockEntity(pos) instanceof SewingTableTileEntity table) {
         	this.table = table;
-			this.addSlot(new SlotItemHandler(table.getItems(), 0, 20, 24) {
+			this.addSlot(new SlotItemHandler(table.getItems(), 0, 15, 15) {
 				public boolean mayPlace(ItemStack item) {
 					return item.is(GenuineBackpacks.items.get("spool").get());
 				}
@@ -57,7 +54,7 @@ public class SewingTableMenu extends AbstractContainerMenu {
 					super.setChanged();
 				}
 			});
-			this.addSlot(new SlotItemHandler(table.getItems(), 1, 20, 47) {
+			this.addSlot(new SlotItemHandler(table.getItems(), 1, 15, 37) {
 				public boolean mayPlace(ItemStack item) {
 					return item.is(Items.SHEARS);
 				}
@@ -67,9 +64,9 @@ public class SewingTableMenu extends AbstractContainerMenu {
 					super.setChanged();
 				}
 			});
-			this.addSlot(new InputSlot(table.getItems(), 2, 42, 35));
-			this.addSlot(new InputSlot(table.getItems(), 3, 87, 35));
-			this.addSlot(new ResultSlot(table.getItems(), 4, 141, 35) {
+			this.addSlot(new InputSlot(table.getItems(), 2, 68, 14));
+			this.addSlot(new InputSlot(table.getItems(), 3, 68, 38));
+			this.addSlot(new ResultSlot(table.getItems(), 4, 134, 26) {
 			});
 
 			// Player Inventory
@@ -92,10 +89,15 @@ public class SewingTableMenu extends AbstractContainerMenu {
 		return this.table.getItems();
 	}
 	
-	private void updateCraft() {
+	private void updateCraft(Level level) {
 		if (this.recipe == null) return;
+		//level.playSound(null, this.pos, GenuineBackpacks.SEWING_CRAFT_SOUND.get(), SoundSource.BLOCKS);
 		this.table.getItems().getStackInSlot(0).shrink(1);
 		this.table.getItems().getStackInSlot(1).hurt(1, RandomSource.create(), null);
+		if (this.table.getItems().getStackInSlot(1).getDamageValue() <= 0) {
+			this.table.getItems().setStackInSlot(1, ItemStack.EMPTY);
+			level.playSound(null, this.pos, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS);
+		}
 		for (ItemStack s : List.of(this.table.getItems().getStackInSlot(2), this.table.getItems().getStackInSlot(3)) ) {
 			for (int i = 0; i < this.recipe.size(); i++) {
 				if (this.recipe.getIngredients().get(i).test(s)) {
@@ -141,6 +143,7 @@ public class SewingTableMenu extends AbstractContainerMenu {
     				}
     			}
     		}
+    		//if (ItemStack.isSameItem(output, ItemStack.EMPTY)) this.sound = false;
             inventory.setItem(4, output);
             table.setChanged();
     	}
@@ -240,7 +243,7 @@ public class SewingTableMenu extends AbstractContainerMenu {
 		public boolean mayPlace(ItemStack stack) { return false; }
 		
 		public void onTake(Player player, ItemStack stack) {
-			updateCraft();
+			updateCraft(player.level());
 		}
 	}
 	

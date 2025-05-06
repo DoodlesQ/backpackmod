@@ -29,15 +29,15 @@ public class GBRecipesProvider extends RecipeProvider {
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, GenuineBackpacks.SEWING_TABLE.get())
 			.pattern("sl").pattern("ww").pattern("ww")
 			.define('s', Items.STICK).define('l', Items.LEATHER).define('w', ItemTags.PLANKS)
-			.group("genuinebackpacks")
+			.group("sewing_table")
 			.unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(Tags.Items.LEATHER).build()))
 			.save(writer);
 		
 		//Sewing Spool
 		ShapedRecipeBuilder.shaped(RecipeCategory.MISC, GenuineBackpacks.items.get("spool").get())
 			.pattern(" s").pattern(" t").pattern(" s")
-			.define('s', Tags.Items.RODS_WOODEN).define('t', Tags.Items.STRING)
-			.group("genuinebackpacks")
+			.define('t', Tags.Items.RODS_WOODEN).define('s', Tags.Items.STRING)
+			.group("spool_of_thread")
 			.unlockedBy("has_string", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(Tags.Items.STRING).build()))
 			.save(writer);
 		

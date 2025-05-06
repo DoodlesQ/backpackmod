@@ -46,11 +46,18 @@ public class SewingRecipe implements Recipe<Container> {
 		if (!container.getItem(0).is(GenuineBackpacks.items.get("spool").get()) || !container.getItem(1).is(Items.SHEARS)) return false;
 		int imatch = 0;
 		int cmatch = 0;
-		for (int i = 0; i < this.recipeItems.size(); i++) {
+		NonNullList<Ingredient> tester = NonNullList.create();
+		for (int a = 0; a < 2; a++) {
+			if (this.recipeItems.size() < a)
+				tester.add(this.recipeItems.get(a));
+			else
+				tester.add(Ingredient.of(ItemStack.EMPTY));
+		}
+		for (int i = 0; i < 2; i++) {
 			for (int j = 2; j <= 3; j++) {
-				if (this.recipeItems.get(i).test(container.getItem(j))) {
+				if (tester.get(i).test(container.getItem(j))) {
 					imatch++;
-					if (container.getItem(j).getCount() >= this.counts.get(i)) {
+					if (container.getItem(j).getCount() >= this.counts.get(i) || tester.get(i).test(ItemStack.EMPTY)) {
 						cmatch++;
 						break;
 					}

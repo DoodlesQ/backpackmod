@@ -9,10 +9,10 @@ import org.slf4j.Logger;
 import com.doodles.genuinebackpacks.content.backpack.BackpackBlock;
 import com.doodles.genuinebackpacks.content.backpack.BackpackItem;
 import com.doodles.genuinebackpacks.content.backpack.BackpackLayer;
-import com.doodles.genuinebackpacks.content.backpack.BackpackMenu;
-import com.doodles.genuinebackpacks.content.backpack.BackpackScreen;
 import com.doodles.genuinebackpacks.content.backpack.BackpackTileEntity;
 import com.doodles.genuinebackpacks.content.backpack.EnderBackpackItem;
+import com.doodles.genuinebackpacks.content.backpack.gui.BackpackMenu;
+import com.doodles.genuinebackpacks.content.backpack.gui.BackpackScreen;
 import com.doodles.genuinebackpacks.content.sewingtable.SewingTableBlock;
 import com.doodles.genuinebackpacks.content.sewingtable.SewingTableMenu;
 import com.doodles.genuinebackpacks.content.sewingtable.SewingTableScreen;
@@ -37,7 +37,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
@@ -59,13 +59,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -101,6 +99,7 @@ public class GenuineBackpacks
      */
     public static MutableComponent ct (String s, Object... args) { return Component.translatable(rl(s), args); } 
     
+    
     // Define logger
     public static final Logger LOGGER = LogUtils.getLogger();
     // Create Deferred Registers
@@ -111,7 +110,9 @@ public class GenuineBackpacks
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, MODID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_JSONS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MODID);
-
+    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(Registries.SOUND_EVENT, MODID);
+    
+    
     // Sewing Table
     public static final RegistryObject<SewingTableBlock> SEWING_TABLE = BLOCKS.register("sewing_table", () -> new SewingTableBlock(BlockBehaviour.Properties.of()
 		.destroyTime(2.5F)
@@ -127,7 +128,8 @@ public class GenuineBackpacks
 	);
 	public static final RegistryObject<RecipeType<SewingRecipe>> SEWING_RECIPE_TYPE = RECIPE_TYPES.register("sewing", () -> new RecipeType<SewingRecipe>(){});
 	public static final RegistryObject<RecipeSerializer<SewingRecipe>> SEWING_RECIPE_JSON = RECIPE_JSONS.register("sewing", SewingRecipeSerializer::new);
-
+	public static final RegistryObject<SoundEvent> SEWING_CRAFT_SOUND = SOUND_EVENTS.register("sewing_table", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "sewing_table")));
+	
     // Etc Items
 	@SuppressWarnings("serial")
 	public static final LinkedHashMap<String, RegistryObject<Item>> items = new LinkedHashMap<String, RegistryObject<Item>>() {{
@@ -161,9 +163,13 @@ public class GenuineBackpacks
     public static final RegistryObject<BlockEntityType<BackpackTileEntity>> BACKPACK_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("backpack",
 		() -> BlockEntityType.Builder.of(BackpackTileEntity::new, BACKPACK_BLOCK.get()).build(null)
 	);
-    
+    public static final RegistryObject<SoundEvent> BACKPACK_OPEN_SOUND = SOUND_EVENTS.register("backpack_open", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "backpack_open")));
+    public static final RegistryObject<SoundEvent> BACKPACK_CLOSE_SOUND = SOUND_EVENTS.register("backpack_close", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "backpack_close")));
+	
     // Ender Backpack
     public static final RegistryObject<EnderBackpackItem> ENDER_BACKPACK = ITEMS.register("ender_backpack", () -> new EnderBackpackItem(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<SoundEvent> ENDER_BACKPACK_OPEN_SOUND = SOUND_EVENTS.register("ender_backpack_open", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "ender_backpack_open")));
+    public static final RegistryObject<SoundEvent> ENDER_BACKPACK_CLOSE_SOUND = SOUND_EVENTS.register("ender_backpack_close", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "ender_backpack_close")));
     
     // Add Items to Creative Tab
     public static final RegistryObject<CreativeModeTab> BACKPACK_TAB = CREATIVE_MODE_TABS.register("backpack_tab", () -> CreativeModeTab.builder()
@@ -178,8 +184,10 @@ public class GenuineBackpacks
             output.accept(ENDER_BACKPACK.get());
         }).build());
     
+    // Keybinding
     public static final Lazy<KeyMapping> BACKPACK_MAPPING = Lazy.of(() -> new KeyMapping(rl("key.%s.backpack"), KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, "key.categories.inventory"));
 
+  
     public GenuineBackpacks() {    	
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::commonSetup);
@@ -192,6 +200,7 @@ public class GenuineBackpacks
         CREATIVE_MODE_TABS.register(modEventBus);
         RECIPE_TYPES.register(modEventBus);
         RECIPE_JSONS.register(modEventBus);
+        SOUND_EVENTS.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -203,9 +212,6 @@ public class GenuineBackpacks
     private void commonSetup(final FMLCommonSetupEvent event) {
         GBPacketHandler.registerNetworkHandler();
     }
-
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {}
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {

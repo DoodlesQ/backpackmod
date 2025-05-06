@@ -1,28 +1,26 @@
-package com.doodles.genuinebackpacks.content.backpack;
+package com.doodles.genuinebackpacks.content.backpack.gui;
 
 import com.doodles.genuinebackpacks.GenuineBackpacks;
+import com.doodles.genuinebackpacks.content.backpack.EnderBackpackItem;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 public class EnderBackpackMenu extends AbstractContainerMenu {
-	private static final int SLOTS_PER_ROW = 9;
 	private final Container container;
 	private final int containerRows;
 	private final ItemStack backpack;
 	private final ContainerLevelAccess access;
 
-	public EnderBackpackMenu(int containerId, Inventory playerInventory, ItemStack backpack, Container container, ContainerLevelAccess access) {
+	public EnderBackpackMenu(int containerId, Player player, ItemStack backpack, Container container, ContainerLevelAccess access) {
 		super(MenuType.GENERIC_9x3, containerId);
 		this.backpack = backpack;
 		this.access = access;
@@ -30,7 +28,7 @@ public class EnderBackpackMenu extends AbstractContainerMenu {
 		checkContainerSize(container, rows * 9);
 		this.container = container;
 		this.containerRows = rows;
-		container.startOpen(playerInventory.player);
+		container.startOpen(player);
 		
 		int i = (this.containerRows - 4) * 18;
 		for(int j = 0; j < this.containerRows; ++j) {
@@ -41,21 +39,23 @@ public class EnderBackpackMenu extends AbstractContainerMenu {
 
 		for(int l = 0; l < 3; ++l) {
 			for(int j1 = 0; j1 < 9; ++j1) {
-				this.addSlot(new Slot(playerInventory, j1 + l * 9 + 9, 8 + j1 * 18, 103 + l * 18 + i));
+				this.addSlot(new Slot(player.getInventory(), j1 + l * 9 + 9, 8 + j1 * 18, 103 + l * 18 + i));
 			}
 		}
 
 		for(int j = 0; j < 9; ++j) {
 			int x = 8+(j*18);
-			Slot slot = new Slot(playerInventory, j, x, 161 + i);
-			if (backpack.equals(playerInventory.getItem(j))) {
-				slot = new Slot(playerInventory, j, x, 161 + i) {
+			Slot slot = new Slot(player.getInventory(), j, x, 161 + i);
+			if (backpack.equals(player.getInventory().getItem(j))) {
+				slot = new Slot(player.getInventory(), j, x, 161 + i) {
 					@Override
 					public boolean mayPickup(Player player) { return false; }
 				};
 			}
 			this.addSlot(slot);
 		}
+
+		player.level().playSound(null, player.getOnPos(), GenuineBackpacks.ENDER_BACKPACK_OPEN_SOUND.get(), SoundSource.PLAYERS);
 	}
 
 	/**
@@ -100,6 +100,7 @@ public class EnderBackpackMenu extends AbstractContainerMenu {
 	 public void removed(Player player) {
 		 CompoundTag tag = this.backpack.getOrCreateTagElement("display");
 		 tag.putBoolean("open", false);
+		 player.level().playSound(null, player.getOnPos(), GenuineBackpacks.ENDER_BACKPACK_CLOSE_SOUND.get(), SoundSource.PLAYERS);
 		 super.removed(player);
 		 this.container.stopOpen(player);
 	 }

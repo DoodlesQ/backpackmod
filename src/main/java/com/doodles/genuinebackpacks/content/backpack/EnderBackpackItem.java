@@ -1,6 +1,7 @@
 package com.doodles.genuinebackpacks.content.backpack;
 
 import com.doodles.genuinebackpacks.GenuineBackpacks;
+import com.doodles.genuinebackpacks.content.backpack.gui.EnderBackpackMenu;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -13,7 +14,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.ItemStack;
@@ -54,12 +54,12 @@ public class EnderBackpackItem extends AbstractBackpackItem {
 		
 		            @Override
 		            public AbstractContainerMenu createMenu(int id, Inventory inv, Player playerEntity) {
-		                return new EnderBackpackMenu(id, inv, pack, enderchest, ContainerLevelAccess.create(level, pos));
+		                return new EnderBackpackMenu(id, playerEntity, pack, enderchest, ContainerLevelAccess.create(level, pos));
 		            }
 		        };
 				CompoundTag tag = pack.getOrCreateTagElement("display");
 				tag.putBoolean("open", true);
-		        NetworkHooks.openScreen((ServerPlayer) player, containerProvider);
+				NetworkHooks.openScreen((ServerPlayer) player, containerProvider);
 			}
 		}
 	}

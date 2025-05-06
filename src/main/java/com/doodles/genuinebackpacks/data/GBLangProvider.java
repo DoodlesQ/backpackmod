@@ -38,5 +38,10 @@ public class GBLangProvider extends LanguageProvider {
 		add(GenuineBackpacks.rl("item.%s.ender_backpack"), "Ender Backpack");
 		add(GenuineBackpacks.rl("container.%s.ender_backpack"), "Ender Backpack");
 		add(GenuineBackpacks.rl("item.%s.bee"), "Beepack");
+		add(GenuineBackpacks.rl("subtitles.%s.block.sewing_table"), "Sewing Table used");
+		add(GenuineBackpacks.rl("subtitles.%s.item.backpack_open"), "Backpack opened");
+		add(GenuineBackpacks.rl("subtitles.%s.item.backpack_close"), "Backpack closed");
+		add(GenuineBackpacks.rl("subtitles.%s.item.ender_ackpack_open"), "Ender Backpack opened");
+		add(GenuineBackpacks.rl("subtitles.%s.item.ender_backpack_close"), "Ender Backpack closed");
 	}
 }

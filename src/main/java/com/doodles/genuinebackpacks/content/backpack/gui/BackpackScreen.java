@@ -1,4 +1,4 @@
-package com.doodles.genuinebackpacks.content.backpack;
+package com.doodles.genuinebackpacks.content.backpack.gui;
 
 import com.doodles.genuinebackpacks.GenuineBackpacks;
 

@@ -135,12 +135,10 @@ public class SewingTableTileEntity extends BlockEntity {
     public CompoundTag getUpdateTag() {
         CompoundTag tag = super.getUpdateTag();
         saveInv(tag);
-        GenuineBackpacks.LOGGER.info(String.format("GETUPDATETAG %s", tag.toString()));
         return tag;
     }
     @Override
     public void handleUpdateTag(CompoundTag tag) {
-        GenuineBackpacks.LOGGER.info(String.format("HANDLEUPDATETAG %s", tag.toString()));
         if (tag != null) loadInv(tag);
     }
     @Override

@@ -1,4 +1,4 @@
-package com.doodles.genuinebackpacks.content.backpack;
+package com.doodles.genuinebackpacks.content.backpack.gui;
 
 import com.doodles.genuinebackpacks.GenuineBackpacks;
 import com.doodles.genuinebackpacks.network.RenamePacket;
@@ -26,7 +26,7 @@ public class BackpackRenameScreen extends Screen {
 	private int[] root = {0, 0};
 	private int[] size = {124, 79};
 	
-	protected BackpackRenameScreen(ItemStack item, Player player, InteractionHand hand) {
+	public BackpackRenameScreen(ItemStack item, Player player, InteractionHand hand) {
 		super(GenuineBackpacks.ct("container.%s.rename"));
 		this.item = item;
 		this.player = player;

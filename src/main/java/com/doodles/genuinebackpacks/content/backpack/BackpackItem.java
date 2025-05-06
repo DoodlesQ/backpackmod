@@ -3,6 +3,8 @@ package com.doodles.genuinebackpacks.content.backpack;
 import java.util.List;
 
 import com.doodles.genuinebackpacks.GenuineBackpacks;
+import com.doodles.genuinebackpacks.content.backpack.gui.BackpackMenu;
+import com.doodles.genuinebackpacks.content.backpack.gui.BackpackRenameScreen;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;

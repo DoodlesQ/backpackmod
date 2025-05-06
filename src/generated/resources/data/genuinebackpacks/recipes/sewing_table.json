@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "group": "genuinebackpacks",
+  "group": "sewing_table",
   "key": {
     "l": {
       "item": "minecraft:leather"
