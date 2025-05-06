@@ -84,7 +84,7 @@ public class SewingRecipeBuilder implements FinishedRecipe {
 		if (t||m||l) {
 			json.addProperty("pockets", (t?1:0)+(m?2:0)+(l?4:0));
 		}
-		json.addProperty("category", "misc");
+		//json.addProperty("category", "misc");
 		//json.addProperty("group", "genuinebackpacks");
 	}
 

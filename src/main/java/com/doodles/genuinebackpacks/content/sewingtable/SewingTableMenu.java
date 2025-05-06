@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -51,6 +52,7 @@ public class SewingTableMenu extends AbstractContainerMenu {
 				@Override
 				public void setChanged() {
 					table.setSpool(this.getItem().is(GenuineBackpacks.items.get("spool").get()));
+					slotsChanged(new ISHWrapper(table.getItems()));
 					super.setChanged();
 				}
 			});
@@ -61,6 +63,7 @@ public class SewingTableMenu extends AbstractContainerMenu {
 				@Override
 				public void setChanged() {
 					table.setShears(this.getItem().is(Items.SHEARS));
+					slotsChanged(new ISHWrapper(table.getItems()));
 					super.setChanged();
 				}
 			});
@@ -93,9 +96,11 @@ public class SewingTableMenu extends AbstractContainerMenu {
 		if (this.recipe == null) return;
 		//level.playSound(null, this.pos, GenuineBackpacks.SEWING_CRAFT_SOUND.get(), SoundSource.BLOCKS);
 		this.table.getItems().getStackInSlot(0).shrink(1);
-		this.table.getItems().getStackInSlot(1).hurt(1, RandomSource.create(), null);
-		if (this.table.getItems().getStackInSlot(1).getDamageValue() <= 0) {
+		ItemStack shears = this.table.getItems().getStackInSlot(1);
+		shears.hurt(1, RandomSource.create(), null);
+		if (shears.getDamageValue() >= shears.getMaxDamage()) {
 			this.table.getItems().setStackInSlot(1, ItemStack.EMPTY);
+			this.table.setSpool(false);
 			level.playSound(null, this.pos, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS);
 		}
 		for (ItemStack s : List.of(this.table.getItems().getStackInSlot(2), this.table.getItems().getStackInSlot(3)) ) {
@@ -143,7 +148,7 @@ public class SewingTableMenu extends AbstractContainerMenu {
     				}
     			}
     		}
-    		//if (ItemStack.isSameItem(output, ItemStack.EMPTY)) this.sound = false;
+    		if (this.recipe != null) GenuineBackpacks.LOGGER.info(this.recipe.getId().toString());
             inventory.setItem(4, output);
             table.setChanged();
     	}

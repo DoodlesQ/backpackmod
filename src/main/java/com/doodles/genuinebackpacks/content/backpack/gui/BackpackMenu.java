@@ -33,18 +33,21 @@ public class BackpackMenu extends AbstractContainerMenu {
 		this.backpack = backpack;
 		this.slotCount = BackpackItem.getTotalSlots(backpack);
 		this.items = BackpackItem.loadItems(backpack);
+		GenuineBackpacks.LOGGER.info(String.valueOf(this.slotCount));
 		
-		this.rows = (int) Math.ceil((this.slotCount-1) / 9.0f);
+		this.rows = (int) Math.ceil(this.slotCount / 9.0f);
 		int offset = 69 + 18 * (this.rows - 2);
+		GenuineBackpacks.LOGGER.info(String.valueOf(this.rows));
 		
 		int i = 0;
 		for (int y = 0; y < this.rows; y++) {
 			for (int x = 0; x < 9; x++) {
 				this.addSlot(new SlotItemHandler(this.items, i, 8+(x*18), 19+(y*18)));
-				if (++i > this.slotCount) break;
+				if (++i >= this.slotCount) break;
 			}
 		}
 		this.slotCount = i;
+		GenuineBackpacks.LOGGER.info(String.valueOf(this.slotCount));
 		
 		// Player Inventory
 		for(int y = 0; y < 3; ++y) {

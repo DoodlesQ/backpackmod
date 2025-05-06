@@ -1,5 +1,7 @@
 package com.doodles.genuinebackpacks.recipe;
 
+import java.awt.List;
+
 import com.doodles.genuinebackpacks.GenuineBackpacks;
 import com.doodles.genuinebackpacks.content.backpack.BackpackItem;
 
@@ -44,27 +46,29 @@ public class SewingRecipe implements Recipe<Container> {
 	@Override
 	public boolean matches(Container container, Level level) {
 		if (!container.getItem(0).is(GenuineBackpacks.items.get("spool").get()) || !container.getItem(1).is(Items.SHEARS)) return false;
-		int imatch = 0;
-		int cmatch = 0;
-		NonNullList<Ingredient> tester = NonNullList.create();
-		for (int a = 0; a < 2; a++) {
-			if (this.recipeItems.size() < a)
-				tester.add(this.recipeItems.get(a));
-			else
-				tester.add(Ingredient.of(ItemStack.EMPTY));
-		}
-		for (int i = 0; i < 2; i++) {
-			for (int j = 2; j <= 3; j++) {
-				if (tester.get(i).test(container.getItem(j))) {
-					imatch++;
-					if (container.getItem(j).getCount() >= this.counts.get(i) || tester.get(i).test(ItemStack.EMPTY)) {
-						cmatch++;
-						break;
-					}
+
+		int found = -1;
+		int exempt = -1;
+		int matched = 0;
+		for (int i = 2; i <= 3; i++) {
+			if (found == i) continue;
+			ItemStack input = container.getItem(i);
+			for (int j = 0; j < this.recipeItems.size(); j++) {
+				if (exempt == j) continue;
+				if (this.recipeItems.get(j).test(input) && input.getCount() >= this.counts.get(j)) {
+					found = i;
+					exempt = j;
+					matched++;
+					break;
 				}
 			}
 		}
-		return imatch == cmatch && imatch == this.recipeItems.size();
+		if (found == -1 || exempt == -1) return false;
+		if (matched == this.recipeItems.size()) {
+			if (matched == 2) return true;
+			return container.getItem(found == 2 ? 3 : 2).is(ItemStack.EMPTY.getItem());
+		}
+		return false;
 	}
 
 	@Override

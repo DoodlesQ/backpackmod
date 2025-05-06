@@ -109,12 +109,15 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
 		int l = getPockets(stack, LARGE);
 		int slots = getTotalSlots(stack);
 		int[] data = getFilled(loadItems(stack));
-		tooltip.add(GenuineBackpacks.ct("gui.%s.backpack.filled", data[0], slots).withStyle(ChatFormatting.GRAY));
-		if (flag.isAdvanced()) tooltip.add(GenuineBackpacks.ct("gui.%s.backpack.items", data[1], slots*64).withStyle(ChatFormatting.GRAY));
-		tooltip.add(Component.empty());
-		tooltip.add(GenuineBackpacks.ct("gui.%s.backpack.tiny", t).withStyle(ChatFormatting.GRAY));
-		tooltip.add(GenuineBackpacks.ct("gui.%s.backpack.medium", m).withStyle(ChatFormatting.GRAY));
-		tooltip.add(GenuineBackpacks.ct("gui.%s.backpack.large", l).withStyle(ChatFormatting.GRAY));
+		CompoundTag tag = stack.getTagElement("display");
+		if (tag == null || !tag.getBoolean("open")) {
+			tooltip.add(GenuineBackpacks.ct("gui.%s.backpack.filled", data[0], slots).withStyle(ChatFormatting.GRAY));
+			if (flag.isAdvanced()) tooltip.add(GenuineBackpacks.ct("gui.%s.backpack.items", data[1], slots*64).withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.empty());
+			tooltip.add(GenuineBackpacks.ct("gui.%s.backpack.tiny", t).withStyle(ChatFormatting.GRAY));
+			tooltip.add(GenuineBackpacks.ct("gui.%s.backpack.medium", m).withStyle(ChatFormatting.GRAY));
+			tooltip.add(GenuineBackpacks.ct("gui.%s.backpack.large", l).withStyle(ChatFormatting.GRAY));
+		}
 	}
 	
 	public static int[] getFilled(ItemStackHandler inv) {
@@ -139,6 +142,13 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
 		int b = Math.min(((hexcolor>>16)&0xFF)+0x10, 0xFF)<<16;
 		this.setColor(dyed, r+g+b);//Math.min(hexcolor, 0x303030));
 		return dyed;
+	}
+	
+	@Override
+	public void setColor(ItemStack stack, int color) {
+		CompoundTag flag = stack.getOrCreateTag();
+		flag.putInt("HideFlags", ItemStack.TooltipPart.DYE.getMask());
+	    stack.getOrCreateTagElement("display").putInt("color", color);
 	}
 	
 	@Override

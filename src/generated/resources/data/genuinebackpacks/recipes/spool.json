@@ -4,10 +4,10 @@
   "group": "spool_of_thread",
   "key": {
     "s": {
-      "tag": "forge:rods/wooden"
+      "tag": "forge:string"
     },
     "t": {
-      "tag": "forge:string"
+      "tag": "forge:rods/wooden"
     }
   },
   "pattern": [
