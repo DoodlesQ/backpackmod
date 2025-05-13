@@ -1,7 +1,5 @@
 package com.doodles.genuinebackpacks.recipe;
 
-import java.awt.List;
-
 import com.doodles.genuinebackpacks.GenuineBackpacks;
 import com.doodles.genuinebackpacks.content.backpack.BackpackItem;
 

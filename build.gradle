@@ -21,7 +21,20 @@ group = mod_group_id
 
 repositories {
     mavenLocal()
-    //maven { url = "https://maven.theillusivec4.top/" }
+    
+    // Curios
+    //maven { 
+        //url = "https://maven.theillusivec4.top/"
+    //}
+    
+    // JEI
+    maven {
+        url = "https://maven.blamejared.com/"
+    }
+    // Fallback
+    maven {
+        url = "https://modmaven.dev"
+    }
 }
 
 base {
@@ -151,10 +164,13 @@ dependencies {
     // Apply Mixin AP
     //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     
-    // Compile against only the API artifact
+    // Curios
     //modCompileOnly("top.theillusivec4.curios:curios-forge:${curios_version}:api")
-    // Use the full Curios API jar at runtime
     //modLocalRuntime("top.theillusivec4.curios:curios-forge:${curios_version}")
+    
+    // Jei
+    modCompileOnly("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    modLocalRuntime("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 }
 // Uncomment the lines below if you wish to configure mixin. The mixin file should be named modid.mixins.json.
 /*

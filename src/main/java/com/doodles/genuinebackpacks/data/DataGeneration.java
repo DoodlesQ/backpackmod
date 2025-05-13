@@ -22,11 +22,6 @@ public class DataGeneration {
         generator.addProvider(event.includeServer(), new GBLangProvider(output, GenuineBackpacks.MODID, "en_us"));
         generator.addProvider(event.includeServer(), new GBItemModelProvider(output, GenuineBackpacks.MODID, efh));
         generator.addProvider(event.includeServer(), new GBBlockStateProvider(output, GenuineBackpacks.MODID, efh));
-        /*
-        generator.addProvider(event.includeServer(), new LootTableProvider(output, Collections.emptySet(),
-            List.of(new LootTableProvider.SubProviderEntry(GBLootTableProvider::new, LootContextParamSets.BLOCK)))
-		);
-		*/
         generator.addProvider(event.includeServer(), new GBRecipesProvider(output));
 	}
 }
