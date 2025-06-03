@@ -31,8 +31,9 @@ public class SewingRecipe implements Recipe<Container> {
 		if (items.size() != counts.size()) throw new ArrayStoreException("Ingredient and Count mismatch for recipe "+id.toString());
 	}
 
+	/*
+	// hardcoded easteregg recipe
 	public SewingRecipe(ItemStack e, ItemStack output) {
-		//easteregg
 		this.id = null;
 		this.recipeItems = NonNullList.create();
 		this.recipeItems.add(Ingredient.of(GenuineBackpacks.items.get("tanned_leather").get()));
@@ -40,6 +41,7 @@ public class SewingRecipe implements Recipe<Container> {
 		this.counts = NonNullList.of(0, 5, 3);
 		this.result = Ingredient.of(output);
 	}
+	*/
 
 	@Override
 	public boolean matches(Container container, Level level) {
@@ -106,6 +108,10 @@ public class SewingRecipe implements Recipe<Container> {
 	@Override
 	public ItemStack getResultItem(RegistryAccess registryAccess) {
 		return this.result.getItems()[0].copy();
+	}
+	
+	public ItemStack getInputItem(int i) {
+		return this.recipeItems.get(i).getItems()[0].copy();
 	}
 
 }

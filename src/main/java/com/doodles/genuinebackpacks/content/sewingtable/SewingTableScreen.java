@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class SewingTableScreen extends AbstractContainerScreen<SewingTableMenu> {
-    private static final ResourceLocation GUI = new ResourceLocation(GenuineBackpacks.MODID, "textures/gui/container/sewing_table.png");
+    private static final ResourceLocation GUI = ResourceLocation.fromNamespaceAndPath(GenuineBackpacks.MODID, "textures/gui/container/sewing_table.png");
 	
 	public SewingTableScreen(SewingTableMenu menu, Inventory playerInventory, Component title) {
 		super(menu, playerInventory, Component.empty());

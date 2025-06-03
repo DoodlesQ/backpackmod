@@ -19,7 +19,7 @@ public class GBLangProvider extends LanguageProvider {
 		add(GenuineBackpacks.items.get("spool").get(), "Spool of Thread");
 		add(GenuineBackpacks.items.get("bound_leather").get(), "Bound Leather");
 		add(GenuineBackpacks.items.get("tanned_leather").get(), "Tanned Leather");
-		add(GenuineBackpacks.items.get("tiny_pocket").get(), "Tiny Pocket");
+		add(GenuineBackpacks.items.get("tiny_pocket").get(), "Small Pocket");
 		add(GenuineBackpacks.items.get("medium_pocket").get(), "Medium Pocket");
 		add(GenuineBackpacks.items.get("large_pocket").get(), "Large Pocket");
 		//add(GenuineBackpacks.BACKPACK.get(), "Backpack");
@@ -28,7 +28,7 @@ public class GBLangProvider extends LanguageProvider {
 		add(GenuineBackpacks.rl("gui.%s.rename"), "Rename");
 		add(GenuineBackpacks.rl("gui.%s.backpack.filled"),	"Filled Slots: %1$d/%2$d");
 		add(GenuineBackpacks.rl("gui.%s.backpack.items"), "Items: %1$d/%2$d");
-		add(GenuineBackpacks.rl("gui.%s.backpack.tiny"), "Tiny Pockets: %1$d/3");
+		add(GenuineBackpacks.rl("gui.%s.backpack.tiny"), "Small Pockets: %1$d/3");
 		add(GenuineBackpacks.rl("gui.%s.backpack.medium"), "Medium Pockets: %1$d/3");
 		add(GenuineBackpacks.rl("gui.%s.backpack.large"), "Large Pockets: %1$d/2");
 		add(GenuineBackpacks.rl("gui.%s.pockets"), "Use a Sewing Table to attach to a backpack");
@@ -41,7 +41,7 @@ public class GBLangProvider extends LanguageProvider {
 		add(GenuineBackpacks.rl("subtitles.%s.block.sewing_table"), "Sewing Table used");
 		add(GenuineBackpacks.rl("subtitles.%s.item.backpack_open"), "Backpack opened");
 		add(GenuineBackpacks.rl("subtitles.%s.item.backpack_close"), "Backpack closed");
-		add(GenuineBackpacks.rl("subtitles.%s.item.ender_ackpack_open"), "Ender Backpack opened");
+		add(GenuineBackpacks.rl("subtitles.%s.item.ender_backpack_open"), "Ender Backpack opened");
 		add(GenuineBackpacks.rl("subtitles.%s.item.ender_backpack_close"), "Ender Backpack closed");
 	}
 }

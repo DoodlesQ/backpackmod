@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public class BackpackRenameScreen extends Screen {
-	private static final ResourceLocation GUI = new ResourceLocation(GenuineBackpacks.MODID, "textures/gui/backpack_rename.png");
+	private static final ResourceLocation GUI = ResourceLocation.fromNamespaceAndPath(GenuineBackpacks.MODID, "textures/gui/backpack_rename.png");
 	private EditBox name;
 	private Button rename;
 	private final ItemStack item;

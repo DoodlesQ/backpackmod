@@ -46,9 +46,17 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
 	
 	@Override
 	public Component getName(ItemStack stack) {
-		if (BackpackItem.getSpecial(stack) == BEE) return GenuineBackpacks.ct("item.%s.bee");
 		return super.getName(stack);
 	}
+	
+	public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
+		BackpackItem.setSpecial(stack, 0);
+		Component name = stack.getHoverName();
+		if (name.getString().equalsIgnoreCase("Beepack")) BackpackItem.setSpecial(stack, BEE);
+		if (name.getString().equalsIgnoreCase("Trans Rights")) BackpackItem.setSpecial(stack, TRANS);
+		super.onInventoryTick(stack, level, player, slotIndex, selectedIndex);
+	}
+	
 	@Override
 	public Rarity getRarity(ItemStack stack) {
 		switch (BackpackItem.getSpecial(stack)) {

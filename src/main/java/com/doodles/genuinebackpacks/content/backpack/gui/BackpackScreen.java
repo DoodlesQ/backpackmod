@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class BackpackScreen extends AbstractContainerScreen<BackpackMenu>{
-    private static final ResourceLocation GUI = new ResourceLocation(GenuineBackpacks.MODID, "textures/gui/container/backpack.png");
+    private static final ResourceLocation GUI = ResourceLocation.fromNamespaceAndPath(GenuineBackpacks.MODID, "textures/gui/container/backpack.png");
 
     private final int invHeight = 97;
     private int packHeight = 54;

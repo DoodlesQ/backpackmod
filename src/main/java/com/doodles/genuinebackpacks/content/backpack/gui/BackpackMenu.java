@@ -33,11 +33,9 @@ public class BackpackMenu extends AbstractContainerMenu {
 		this.backpack = backpack;
 		this.slotCount = BackpackItem.getTotalSlots(backpack);
 		this.items = BackpackItem.loadItems(backpack);
-		GenuineBackpacks.LOGGER.info(String.valueOf(this.slotCount));
 		
 		this.rows = (int) Math.ceil(this.slotCount / 9.0f);
 		int offset = 69 + 18 * (this.rows - 2);
-		GenuineBackpacks.LOGGER.info(String.valueOf(this.rows));
 		
 		int i = 0;
 		for (int y = 0; y < this.rows; y++) {
@@ -47,7 +45,6 @@ public class BackpackMenu extends AbstractContainerMenu {
 			}
 		}
 		this.slotCount = i;
-		GenuineBackpacks.LOGGER.info(String.valueOf(this.slotCount));
 		
 		// Player Inventory
 		for(int y = 0; y < 3; ++y) {
@@ -59,6 +56,8 @@ public class BackpackMenu extends AbstractContainerMenu {
 		for(int j = 0; j < 9; ++j) {
 			int x = 8+(j*18);
 			Slot slot = new Slot(player.getInventory(), j, x, offset+58);
+			// Prevent moving the currently open Backpack from its slot.
+			//TODO: This is a clunky way to do this. There might be a better way.
 			if (backpack.equals(player.getSlot(j).get())) {
 				slot = new Slot(player.getInventory(), j, x, offset+58) {
 					@Override

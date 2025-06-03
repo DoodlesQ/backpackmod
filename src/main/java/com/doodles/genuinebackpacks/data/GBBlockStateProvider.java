@@ -23,7 +23,7 @@ public class GBBlockStateProvider extends BlockStateProvider {
 	protected void registerStatesAndModels() {
 		VariantBlockStateBuilder builder = getVariantBuilder(GenuineBackpacks.BACKPACK_BLOCK.get());
 		builder.forAllStates(state -> {
-			ExistingModelFile backpack = models().getExistingFile(new ResourceLocation(GenuineBackpacks.MODID, getBackpackModel(state)));
+			ExistingModelFile backpack = models().getExistingFile(ResourceLocation.fromNamespaceAndPath(GenuineBackpacks.MODID, getBackpackModel(state)));
 			return ConfiguredModel.builder()
 				.modelFile(backpack)
 				.rotationY((int) state.getValue(BackpackBlock.FACING).toYRot())

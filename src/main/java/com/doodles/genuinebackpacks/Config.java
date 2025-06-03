@@ -11,6 +11,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.
 // Demonstrates how to use Forge's config APIs
@@ -43,10 +44,9 @@ public class Config
     public static String magicNumberIntroduction;
     public static Set<Item> items;
 
-    @SuppressWarnings("deprecation")
 	private static boolean validateItemName(final Object obj)
     {
-        return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(new ResourceLocation(itemName));
+        return obj instanceof String itemName && ForgeRegistries.ITEMS.containsKey(ResourceLocation.parse(itemName));
     }
 
     @SuppressWarnings("deprecation")
@@ -59,7 +59,7 @@ public class Config
 
         // convert the list of strings into a set of items
         items = ITEM_STRINGS.get().stream()
-                .map(itemName -> BuiltInRegistries.ITEM.get(new ResourceLocation(itemName)))
+                .map(itemName -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemName)))
                 .collect(Collectors.toSet());
     }
 }

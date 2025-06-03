@@ -1,4 +1,4 @@
-// 1.20.1	2025-05-06T13:59:01.457165422	Recipes
+// 1.20.1	2025-06-02T14:55:32.303714028	Recipes
 e6d05feae995fdf9a4ae8afcb6a25c085fa1bd1a data/genuinebackpacks/advancements/recipes/misc/sewing_table.json
 a3673ab8b2ac89fc4695f2ba48fb555b8041c477 data/genuinebackpacks/advancements/recipes/misc/spool.json
 ad042504e2e27cf406a14b9e47a6d1f3daf05515 data/genuinebackpacks/advancements/recipes/misc/tanned_leather.json
@@ -14,7 +14,7 @@ fc7b4afa139d9ac616bf20eb233ba3923b64634b data/genuinebackpacks/recipes/blue_back
 2171cc5ce5bf26a6fa1212b7ab4f5955c0da518a data/genuinebackpacks/recipes/brown_backpack_restitch.json
 99216770515b841de5254d5d05801d226a5d864b data/genuinebackpacks/recipes/cyan_backpack.json
 c39447b331feccf960c1af4db94cdc29bccad5b5 data/genuinebackpacks/recipes/cyan_backpack_restitch.json
-a65897539f0c4adea8e00610e3190da7612122a8 data/genuinebackpacks/recipes/ender_backpack.json
+2a75b9d98dcdb06fd6775ba8e748b4eb3b2a88cc data/genuinebackpacks/recipes/ender_backpack.json
 5c4c36f2664bd110a93d3652b10ab23d9c3cf779 data/genuinebackpacks/recipes/gray_backpack.json
 e074f28c015ca728d452e8849bb3b745e700dbe5 data/genuinebackpacks/recipes/gray_backpack_restitch.json
 5bcc68a47c6fd7b59f841bed3f1477985176b876 data/genuinebackpacks/recipes/green_backpack.json

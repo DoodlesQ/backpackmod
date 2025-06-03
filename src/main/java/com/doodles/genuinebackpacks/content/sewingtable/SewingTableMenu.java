@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.doodles.genuinebackpacks.GenuineBackpacks;
-import com.doodles.genuinebackpacks.content.backpack.BackpackItem;
 import com.doodles.genuinebackpacks.recipe.SewingRecipe;
 
 import net.minecraft.core.BlockPos;
@@ -18,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -132,23 +130,26 @@ public class SewingTableMenu extends AbstractContainerMenu {
                 output = optional.get().assemble(inventory, level.registryAccess());
                 this.recipe = optional.get();
     		} else {
-    			//easteregg
-    			ItemStack l = inventory.getItem(2);
-    			ItemStack e = inventory.getItem(3);
-    			if (l.is(GenuineBackpacks.items.get("tanned_leather").get()) && l.getCount() >= 5) {
-    				if (e.is(Items.AMETHYST_BLOCK) && e.getCount() >= 3) {
-    					output = new ItemStack(GenuineBackpacks.BACKPACK.get());
-    					BackpackItem.setSpecial(output, BackpackItem.TRANS);
-    	    			this.recipe = new SewingRecipe(e, output);
-    				}
-    				if (e.is(Items.HONEYCOMB_BLOCK) && e.getCount() >= 3) {
-    					output = new ItemStack(GenuineBackpacks.BACKPACK.get());
-    					BackpackItem.setSpecial(output, BackpackItem.BEE);
-    	    			this.recipe = new SewingRecipe(e, output);
-    				}
+    			//hardcoded easteregg recipes
+    			/*
+    			if (inventory.getItem(0).is(GenuineBackpacks.items.get("spool").get()) && inventory.getItem(1).is(Items.SHEARS)) {
+	    			ItemStack l = inventory.getItem(2);
+	    			ItemStack e = inventory.getItem(3);
+	    			if (l.is(GenuineBackpacks.items.get("tanned_leather").get()) && l.getCount() >= 5) {
+	    				if (e.is(Items.AMETHYST_BLOCK) && e.getCount() >= 3) {
+	    					output = new ItemStack(GenuineBackpacks.BACKPACK.get());
+	    					BackpackItem.setSpecial(output, BackpackItem.TRANS);
+	    	    			this.recipe = new SewingRecipe(e, output);
+	    				}
+	    				if (e.is(Items.HONEYCOMB_BLOCK) && e.getCount() >= 3) {
+	    					output = new ItemStack(GenuineBackpacks.BACKPACK.get());
+	    					BackpackItem.setSpecial(output, BackpackItem.BEE);
+	    	    			this.recipe = new SewingRecipe(e, output);
+	    				}
+	    			}
     			}
+    			*/
     		}
-    		if (this.recipe != null) GenuineBackpacks.LOGGER.info(this.recipe.getId().toString());
             inventory.setItem(4, output);
             table.setChanged();
     	}

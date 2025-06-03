@@ -11,7 +11,7 @@ public class GBPacketHandler {
 	
 	public static SimpleChannel registerNetworkHandler () {
 		final SimpleChannel channel = NetworkRegistry.newSimpleChannel(
-			new ResourceLocation(GenuineBackpacks.MODID, "network"),
+			ResourceLocation.fromNamespaceAndPath(GenuineBackpacks.MODID, "network"),
 			() -> PROTOCOL_VERSION,
 			PROTOCOL_VERSION::equals,
 			PROTOCOL_VERSION::equals

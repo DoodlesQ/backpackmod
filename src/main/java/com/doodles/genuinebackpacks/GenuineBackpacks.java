@@ -6,6 +6,7 @@ import java.util.List;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 
+import com.doodles.genuinebackpacks.content.backpack.AbstractBackpackItem;
 import com.doodles.genuinebackpacks.content.backpack.BackpackBlock;
 import com.doodles.genuinebackpacks.content.backpack.BackpackItem;
 import com.doodles.genuinebackpacks.content.backpack.BackpackLayer;
@@ -33,7 +34,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -128,7 +128,7 @@ public class GenuineBackpacks
 	);
 	public static final RegistryObject<RecipeType<SewingRecipe>> SEWING_RECIPE_TYPE = RECIPE_TYPES.register("sewing", () -> new RecipeType<SewingRecipe>(){});
 	public static final RegistryObject<RecipeSerializer<SewingRecipe>> SEWING_RECIPE_JSON = RECIPE_JSONS.register("sewing", SewingRecipeSerializer::new);
-	public static final RegistryObject<SoundEvent> SEWING_CRAFT_SOUND = SOUND_EVENTS.register("sewing_table", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "sewing_table")));
+	public static final RegistryObject<SoundEvent> SEWING_CRAFT_SOUND = SOUND_EVENTS.register("sewing_table", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(MODID, "sewing_table")));
 	
     // Etc Items
 	@SuppressWarnings("serial")
@@ -163,13 +163,13 @@ public class GenuineBackpacks
     public static final RegistryObject<BlockEntityType<BackpackTileEntity>> BACKPACK_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("backpack",
 		() -> BlockEntityType.Builder.of(BackpackTileEntity::new, BACKPACK_BLOCK.get()).build(null)
 	);
-    public static final RegistryObject<SoundEvent> BACKPACK_OPEN_SOUND = SOUND_EVENTS.register("backpack_open", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "backpack_open")));
-    public static final RegistryObject<SoundEvent> BACKPACK_CLOSE_SOUND = SOUND_EVENTS.register("backpack_close", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "backpack_close")));
+    public static final RegistryObject<SoundEvent> BACKPACK_OPEN_SOUND = SOUND_EVENTS.register("backpack_open", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(MODID, "backpack_open")));
+    public static final RegistryObject<SoundEvent> BACKPACK_CLOSE_SOUND = SOUND_EVENTS.register("backpack_close", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(MODID, "backpack_close")));
 	
     // Ender Backpack
     public static final RegistryObject<EnderBackpackItem> ENDER_BACKPACK = ITEMS.register("ender_backpack", () -> new EnderBackpackItem(new Item.Properties().stacksTo(1)));
-    public static final RegistryObject<SoundEvent> ENDER_BACKPACK_OPEN_SOUND = SOUND_EVENTS.register("ender_backpack_open", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "ender_backpack_open")));
-    public static final RegistryObject<SoundEvent> ENDER_BACKPACK_CLOSE_SOUND = SOUND_EVENTS.register("ender_backpack_close", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "ender_backpack_close")));
+    public static final RegistryObject<SoundEvent> ENDER_BACKPACK_OPEN_SOUND = SOUND_EVENTS.register("ender_backpack_open", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(MODID, "ender_backpack_open")));
+    public static final RegistryObject<SoundEvent> ENDER_BACKPACK_CLOSE_SOUND = SOUND_EVENTS.register("ender_backpack_close", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(MODID, "ender_backpack_close")));
     
     // Add Items to Creative Tab
     public static final RegistryObject<CreativeModeTab> BACKPACK_TAB = CREATIVE_MODE_TABS.register("backpack_tab", () -> CreativeModeTab.builder()
@@ -188,7 +188,8 @@ public class GenuineBackpacks
     public static final Lazy<KeyMapping> BACKPACK_MAPPING = Lazy.of(() -> new KeyMapping(rl("key.%s.backpack"), KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, "key.categories.inventory"));
 
   
-    public GenuineBackpacks() {    	
+    @SuppressWarnings("removal")
+	public GenuineBackpacks() {    	
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::commonSetup);
 
@@ -222,19 +223,20 @@ public class GenuineBackpacks
         	event.enqueueWork(() -> MenuScreens.register(GenuineBackpacks.SEWING_TABLE_MENU.get(), SewingTableScreen::new));
         	event.enqueueWork(() -> MenuScreens.register(GenuineBackpacks.BACKPACK_MENU.get(), BackpackScreen::new));
         	
+        	// Open Texture
         	event.enqueueWork(() -> {
         		Item[] bp = {BACKPACK.get(), ENDER_BACKPACK.get()};
         		for (int i = 0; i < bp.length; i++) {
-	        		ItemProperties.register(bp[i], new ResourceLocation(MODID, "backpack_open"), 
+	        		ItemProperties.register(bp[i], ResourceLocation.fromNamespaceAndPath(MODID, "backpack_open"), 
 	    				(stack, level, entity, seed) -> {
-	    					CompoundTag tag = stack.getTagElement("display");
-	    					return (tag != null && tag.contains("open") && tag.getBoolean("open")) ? 1.0f : 0.0f;
+	    					return AbstractBackpackItem.isOpen(stack) ? 1.0f : 0.0f;
 	    				}
 					);
         		}
         	});
+        	// Easter Eggs
         	event.enqueueWork(() -> {
-        		ItemProperties.register(BACKPACK.get(), new ResourceLocation(MODID, "easter_egg"),
+        		ItemProperties.register(BACKPACK.get(), ResourceLocation.fromNamespaceAndPath(MODID, "easter_egg"),
     				(stack, level, entity, seed) -> {
     					int egg = BackpackItem.getSpecial(stack);
     					return (float)egg;

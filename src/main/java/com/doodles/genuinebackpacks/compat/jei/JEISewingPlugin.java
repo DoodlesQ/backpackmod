@@ -1,6 +1,7 @@
 package com.doodles.genuinebackpacks.compat.jei;
 
 import com.doodles.genuinebackpacks.GenuineBackpacks;
+
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -14,7 +15,7 @@ public class JEISewingPlugin implements IModPlugin {
 
 	@Override
 	public ResourceLocation getPluginUid() {
-		return new ResourceLocation(GenuineBackpacks.MODID, "sewing_plugin");
+		return ResourceLocation.fromNamespaceAndPath(GenuineBackpacks.MODID, "sewing_plugin");
 	}
 
 	@Override

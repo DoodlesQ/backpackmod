@@ -1,7 +1,6 @@
 package com.doodles.genuinebackpacks.content.backpack;
 
-import com.doodles.genuinebackpacks.GenuineBackpacks;
-
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -9,7 +8,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
 public class AbstractBackpackItem extends BlockItem implements Equipable {
@@ -30,10 +28,6 @@ public class AbstractBackpackItem extends BlockItem implements Equipable {
 		
 		return result;
 	}
-	
-	public static void open(Level level, Player player, ItemStack pack) {
-		GenuineBackpacks.LOGGER.info("FAILURE");
-	}
 
 	@Override
 	public EquipmentSlot getEquipmentSlot() {
@@ -43,4 +37,31 @@ public class AbstractBackpackItem extends BlockItem implements Equipable {
 	public static boolean wornBy(Player player, ItemStack test) {
 		return ItemStack.isSameItem(player.getItemBySlot(EquipmentSlot.CHEST), test);
 	}
+	
+	static public boolean isOpen(ItemStack stack) {
+		CompoundTag tag = stack.getTagElement("display");
+		return (tag != null && tag.contains("open") && tag.getBoolean("open"));
+	}
+	
+	public boolean isNotReplaceableByPickAction(ItemStack stack, Player player, int inventorySlot)
+    {
+		return true;
+    }
+	
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		if (isOpen(oldStack) || isOpen(newStack)) return false;
+		return super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
+	}
+	
+	
+	//Curios
+	/*
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag __) {
+		return CuriosApi.createCurioProvider(new ICurio() {
+			@Override
+			public ItemStack getStack() { return stack; }
+		});
+	}
+	*/
 }

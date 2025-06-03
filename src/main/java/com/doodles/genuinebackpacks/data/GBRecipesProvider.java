@@ -102,7 +102,7 @@ public class GBRecipesProvider extends RecipeProvider {
 		//Ender Backpack
 		SewingRecipeBuilder.build("ender_backpack", GenuineBackpacks.ENDER_BACKPACK.get())
 			.add(GenuineBackpacks.items.get("tanned_leather").get(), 5)
-			.add(Items.ENDER_CHEST, 3)
+			.add(Items.ENDER_CHEST, 1)
 			.save(writer);
 	}
 	

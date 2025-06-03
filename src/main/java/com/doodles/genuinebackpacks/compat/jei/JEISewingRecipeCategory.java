@@ -6,12 +6,9 @@ import com.doodles.genuinebackpacks.recipe.SewingRecipe;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +23,7 @@ public class JEISewingRecipeCategory implements IRecipeCategory<SewingRecipe> {
 	public JEISewingRecipeCategory (IGuiHelper helper) {
 		title = GenuineBackpacks.ct("container.%s.sewing_table");
 		icon = helper.createDrawableItemStack(new ItemStack(GenuineBackpacks.SEWING_TABLE.get()));
-		background = helper.createDrawable(new ResourceLocation(GenuineBackpacks.MODID, "textures/gui/jei/sewing_table.png"), 0, 0, 126, 60);
+		background = helper.createDrawable(ResourceLocation.fromNamespaceAndPath(GenuineBackpacks.MODID, "textures/gui/jei/sewing_table.png"), 0, 0, 126, 60);
 	}
 	
 	@Override
@@ -43,8 +40,15 @@ public class JEISewingRecipeCategory implements IRecipeCategory<SewingRecipe> {
 
 	@Override
 	public void setRecipe(IRecipeLayoutBuilder builder, SewingRecipe recipe, IFocusGroup focuses) {
-		builder.addInputSlot(22, 10).addIngredients(recipe.getIngredients().get(0));
-		if (recipe.size() > 1) builder.addInputSlot(22, 34).addIngredients(recipe.getIngredients().get(1));
+		ItemStack item0 = recipe.getInputItem(0);
+		ItemStack item1 = ItemStack.EMPTY;
+		item0.setCount(recipe.getCounts().get(0));
+		builder.addInputSlot(22, 10).addItemStack(item0);
+		if (recipe.size() > 1) {
+			item1 = recipe.getInputItem(1);
+			item1.setCount(recipe.getCounts().get(1));
+		}
+		builder.addInputSlot(22, 34).addItemStack(item1);
 		builder.addOutputSlot(88, 22).addItemStack(GBRecipeUtils.getResult(recipe));
 	}
 

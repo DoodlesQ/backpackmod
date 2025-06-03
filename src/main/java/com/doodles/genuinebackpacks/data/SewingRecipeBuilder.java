@@ -34,7 +34,7 @@ public class SewingRecipeBuilder implements FinishedRecipe {
 		this.pockets = pockets;
 	}
 	public static SewingRecipeBuilder build(String id, ItemStack r) {
-		return new SewingRecipeBuilder(new ResourceLocation(GenuineBackpacks.MODID, id), NonNullList.create(), NonNullList.create(), r, -1, new boolean[]{false, false, false});
+		return new SewingRecipeBuilder(ResourceLocation.fromNamespaceAndPath(GenuineBackpacks.MODID, id), NonNullList.create(), NonNullList.create(), r, -1, new boolean[]{false, false, false});
 	}
 	
 	public static SewingRecipeBuilder build(String id, ItemLike r) {
