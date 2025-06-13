@@ -42,7 +42,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -78,30 +78,17 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(GenuineBackpacks.MODID)
 public class GenuineBackpacks
 {
     public static final String MODID = "genuinebackpacks";
     public static SimpleChannel NETWORK;
     
-    /**
-     * Converts a string into a valid resource id using the modId
-     * <p>
-     * @return {@code String.format(s, MODID)}
-     */
-    public static String rl (String s) { return String.format(s, MODID); }
-    
-    /**
-     * Converts a string into a MutableComponent using the modId and passing along the args
-     * <p>
-     * @return {@code Component.translatable(String.format(s, MODID), args)}
-     */
-    public static MutableComponent ct (String s, Object... args) { return Component.translatable(rl(s), args); } 
-    
-    
     // Define logger
     public static final Logger LOGGER = LogUtils.getLogger();
+    
+    
+    /* REGISTRATION */
     // Create Deferred Registers
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
@@ -111,7 +98,6 @@ public class GenuineBackpacks
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, MODID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_JSONS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MODID);
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(Registries.SOUND_EVENT, MODID);
-    
     
     // Sewing Table
     public static final RegistryObject<SewingTableBlock> SEWING_TABLE = BLOCKS.register("sewing_table", () -> new SewingTableBlock(BlockBehaviour.Properties.of()
@@ -126,11 +112,13 @@ public class GenuineBackpacks
 	public static final RegistryObject<MenuType<SewingTableMenu>> SEWING_TABLE_MENU = MENU_TYPES.register("sewing_table",
 		() -> IForgeMenuType.create((windowid, inv, data) -> new SewingTableMenu(windowid, inv.player, data.readBlockPos()))
 	);
+	// Sewing Recipe
 	public static final RegistryObject<RecipeType<SewingRecipe>> SEWING_RECIPE_TYPE = RECIPE_TYPES.register("sewing", () -> new RecipeType<SewingRecipe>(){});
 	public static final RegistryObject<RecipeSerializer<SewingRecipe>> SEWING_RECIPE_JSON = RECIPE_JSONS.register("sewing", SewingRecipeSerializer::new);
 	public static final RegistryObject<SoundEvent> SEWING_CRAFT_SOUND = SOUND_EVENTS.register("sewing_table", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(MODID, "sewing_table")));
 	
     // Etc Items
+	//NOTE: This is a stupid way to do this. Never do this.
 	@SuppressWarnings("serial")
 	public static final LinkedHashMap<String, RegistryObject<Item>> items = new LinkedHashMap<String, RegistryObject<Item>>() {{
 		put("spool",          	ITEMS.register("spool", 			() -> new Item(new Item.Properties())));
@@ -171,6 +159,7 @@ public class GenuineBackpacks
     public static final RegistryObject<SoundEvent> ENDER_BACKPACK_OPEN_SOUND = SOUND_EVENTS.register("ender_backpack_open", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(MODID, "ender_backpack_open")));
     public static final RegistryObject<SoundEvent> ENDER_BACKPACK_CLOSE_SOUND = SOUND_EVENTS.register("ender_backpack_close", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(MODID, "ender_backpack_close")));
     
+    
     // Add Items to Creative Tab
     public static final RegistryObject<CreativeModeTab> BACKPACK_TAB = CREATIVE_MODE_TABS.register("backpack_tab", () -> CreativeModeTab.builder()
 		.title(ct("itemGroup.%s.backpack_tab"))
@@ -178,14 +167,16 @@ public class GenuineBackpacks
         .displayItems((parameters, output) -> {
             output.accept(SEWING_TABLE_ITEM.get());
             for (RegistryObject<Item> i : items.values()) output.accept(i.get());
-            for (DyeItem dye : GenuineBackpacks.WOOL.keySet()) {
-            	output.accept(BACKPACK.get().getDyed(dye.getDyeColor()));
+            for (DyeColor dye : GenuineBackpacks.WOOL.keySet()) {
+            	ItemStack pack = new ItemStack(BACKPACK.get());
+            	BackpackItem.setDye(pack, BackpackItem.extractColor(dye));
+            	output.accept(pack);
             }
             output.accept(ENDER_BACKPACK.get());
         }).build());
     
     // Keybinding
-    public static final Lazy<KeyMapping> BACKPACK_MAPPING = Lazy.of(() -> new KeyMapping(rl("key.%s.backpack"), KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, "key.categories.inventory"));
+    public static final Lazy<KeyMapping> BACKPACK_MAPPING = Lazy.of(() -> new KeyMapping(String.format("key.%s.backpack", MODID), KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, "key.categories.inventory"));
 
   
     @SuppressWarnings("removal")
@@ -223,7 +214,7 @@ public class GenuineBackpacks
         	event.enqueueWork(() -> MenuScreens.register(GenuineBackpacks.SEWING_TABLE_MENU.get(), SewingTableScreen::new));
         	event.enqueueWork(() -> MenuScreens.register(GenuineBackpacks.BACKPACK_MENU.get(), BackpackScreen::new));
         	
-        	// Open Texture
+        	// Texture for Open state
         	event.enqueueWork(() -> {
         		Item[] bp = {BACKPACK.get(), ENDER_BACKPACK.get()};
         		for (int i = 0; i < bp.length; i++) {
@@ -234,12 +225,15 @@ public class GenuineBackpacks
 					);
         		}
         	});
-        	// Easter Eggs
+        	// Textures for Easter Eggs
         	event.enqueueWork(() -> {
         		ItemProperties.register(BACKPACK.get(), ResourceLocation.fromNamespaceAndPath(MODID, "easter_egg"),
     				(stack, level, entity, seed) -> {
-    					int egg = BackpackItem.getSpecial(stack);
-    					return (float)egg;
+    					switch (BackpackItem.getSpecial(stack)) {
+							case TRANS: return 1;
+							case BEE:   return 2;
+    						default:    return 0;
+    					}
     				}
 				);
         	});
@@ -250,11 +244,12 @@ public class GenuineBackpacks
         	event.register(BACKPACK_MAPPING.get());
         }
         
+        // Tint Backpacks
         @SubscribeEvent
         public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
         	event.register((itemstack, color) -> {
-        			int c = BackpackItem.getColor(itemstack, true);
-        			if (BackpackItem.getSpecial(itemstack) > 0) c = 0xffffff;
+        			int c = BackpackItem.getDye(itemstack);
+        			if (BackpackItem.getSpecial(itemstack) != BackpackItem.Special.NONE) c = 0xffffff;
         			return color > 0 ? -1 : c;
         		},
         		GenuineBackpacks.BACKPACK.get()
@@ -264,8 +259,8 @@ public class GenuineBackpacks
         public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
         	event.register((state, getter, pos, color) -> {
         			if (getter.getBlockEntity(pos) instanceof BackpackTileEntity blockEntity) {
-        				int c = blockEntity.backpack.is(BACKPACK.get()) ? BackpackItem.getColor(blockEntity.backpack, true) : 0xffffff;
-        				if (BackpackItem.getSpecial(blockEntity.backpack) > 0) c = 0xffffff;
+        				int c = blockEntity.backpack.is(BACKPACK.get()) ? BackpackItem.getDye(blockEntity.backpack) : 0xffffff;
+        				if (BackpackItem.getSpecial(blockEntity.backpack) != BackpackItem.Special.NONE) c = 0xffffff;
         				return color > 0 ? -1 : c;
         			}
         			return -1;
@@ -274,6 +269,7 @@ public class GenuineBackpacks
     		);
         }
         
+        // Display Backpacks being worn
         @SuppressWarnings("unchecked")
 		@SubscribeEvent
         public static void addPlayerLayer(EntityRenderersEvent.AddLayers event) {
@@ -283,7 +279,6 @@ public class GenuineBackpacks
         		if (r instanceof LivingEntityRenderer renderer) {
         			renderer.addLayer(new BackpackLayer(renderer));
         		}
-        		
         	}
         }
     }
@@ -292,6 +287,7 @@ public class GenuineBackpacks
     public static class ClientForgeEvents {
         private static final Minecraft client = Minecraft.getInstance();
 
+        // Detect keybinding to open backpacks when worn
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {
         	if (client.player != null) {
@@ -314,29 +310,31 @@ public class GenuineBackpacks
     }
 
 	@SuppressWarnings("serial")
-	public static final LinkedHashMap<DyeItem, Item> WOOL = new LinkedHashMap<DyeItem, Item>() {{
-		put((DyeItem)Items.WHITE_DYE, Items.WHITE_WOOL);
-		put((DyeItem)Items.LIGHT_GRAY_DYE, Items.LIGHT_GRAY_WOOL);
-		put((DyeItem)Items.GRAY_DYE, Items.GRAY_WOOL);
-		put((DyeItem)Items.BLACK_DYE, Items.BLACK_WOOL);
-		put((DyeItem)Items.BROWN_DYE, Items.BROWN_WOOL);
-		put((DyeItem)Items.RED_DYE, Items.RED_WOOL);
-		put((DyeItem)Items.ORANGE_DYE, Items.ORANGE_WOOL);
-		put((DyeItem)Items.YELLOW_DYE, Items.YELLOW_WOOL);
-		put((DyeItem)Items.LIME_DYE, Items.LIME_WOOL);
-		put((DyeItem)Items.GREEN_DYE, Items.GREEN_WOOL);
-		put((DyeItem)Items.LIGHT_BLUE_DYE, Items.LIGHT_BLUE_WOOL);
-		put((DyeItem)Items.CYAN_DYE, Items.CYAN_WOOL);
-		put((DyeItem)Items.BLUE_DYE, Items.BLUE_WOOL);
-		put((DyeItem)Items.PURPLE_DYE, Items.PURPLE_WOOL);
-		put((DyeItem)Items.MAGENTA_DYE, Items.MAGENTA_WOOL);
-		put((DyeItem)Items.PINK_DYE, Items.PINK_WOOL);
+	public static final LinkedHashMap<DyeColor, Item> WOOL = new LinkedHashMap<DyeColor, Item>() {{
+		put(DyeColor.WHITE, Items.WHITE_WOOL);
+		put(DyeColor.LIGHT_GRAY, Items.LIGHT_GRAY_WOOL);
+		put(DyeColor.GRAY, Items.GRAY_WOOL);
+		put(DyeColor.BLACK, Items.BLACK_WOOL);
+		put(DyeColor.BROWN, Items.BROWN_WOOL);
+		put(DyeColor.RED, Items.RED_WOOL);
+		put(DyeColor.ORANGE, Items.ORANGE_WOOL);
+		put(DyeColor.YELLOW, Items.YELLOW_WOOL);
+		put(DyeColor.LIME, Items.LIME_WOOL);
+		put(DyeColor.GREEN, Items.GREEN_WOOL);
+		put(DyeColor.LIGHT_BLUE, Items.LIGHT_BLUE_WOOL);
+		put(DyeColor.CYAN, Items.CYAN_WOOL);
+		put(DyeColor.BLUE, Items.BLUE_WOOL);
+		put(DyeColor.PURPLE, Items.PURPLE_WOOL);
+		put(DyeColor.MAGENTA, Items.MAGENTA_WOOL);
+		put(DyeColor.PINK, Items.PINK_WOOL);
 	}};
-	
-	private static void pocketText(List<Component> tooltip, int s, int m) {
+
+    public static MutableComponent ct (String s, Object... args) { return Component.translatable(String.format(s, MODID), args); } 
+    
+	private static void pocketText(List<Component> tooltip, int inc, int max) {
 		tooltip.add(ct("gui.%s.pockets").withStyle(ChatFormatting.YELLOW));
 		tooltip.add(Component.empty());
-		tooltip.add(ct("gui.%s.pockets.increase", s).withStyle(ChatFormatting.GRAY));
-		tooltip.add(ct("gui.%s.pockets.capacity", m).withStyle(ChatFormatting.GRAY));
+		tooltip.add(ct("gui.%s.pockets.increase", inc).withStyle(ChatFormatting.GRAY));
+		tooltip.add(ct("gui.%s.pockets.capacity", max).withStyle(ChatFormatting.GRAY));
 	}
 }

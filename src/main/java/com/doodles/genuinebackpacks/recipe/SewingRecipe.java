@@ -79,10 +79,10 @@ public class SewingRecipe implements Recipe<Container> {
 			BackpackItem rpack = (BackpackItem)result.getItem();
 			boolean recolor = rpack.hasCustomColor(result);
 			if (incoming.hasCustomHoverName()) result.setHoverName(incoming.getHoverName());
-			if (!recolor) rpack.setColor(result, rpack.getColor(incoming));
-			BackpackItem.setPockets(result, BackpackItem.TINY, BackpackItem.getPockets(incoming, BackpackItem.TINY) + BackpackItem.getPockets(result, BackpackItem.TINY));
-			BackpackItem.setPockets(result, BackpackItem.MEDIUM, BackpackItem.getPockets(incoming, BackpackItem.MEDIUM) + BackpackItem.getPockets(result, BackpackItem.MEDIUM));
-			BackpackItem.setPockets(result, BackpackItem.LARGE, BackpackItem.getPockets(incoming, BackpackItem.LARGE) + BackpackItem.getPockets(result, BackpackItem.LARGE));
+			if (!recolor) BackpackItem.setDye(result, rpack.getColor(incoming));
+			BackpackItem.setPockets(result, BackpackItem.PocketType.SMALL, BackpackItem.getPockets(incoming, BackpackItem.PocketType.SMALL) + BackpackItem.getPockets(result, BackpackItem.PocketType.SMALL));
+			BackpackItem.setPockets(result, BackpackItem.PocketType.MEDIUM, BackpackItem.getPockets(incoming, BackpackItem.PocketType.MEDIUM) + BackpackItem.getPockets(result, BackpackItem.PocketType.MEDIUM));
+			BackpackItem.setPockets(result, BackpackItem.PocketType.LARGE, BackpackItem.getPockets(incoming, BackpackItem.PocketType.LARGE) + BackpackItem.getPockets(result, BackpackItem.PocketType.LARGE));
 			BackpackItem.setSpecial(result, BackpackItem.getSpecial(incoming));
 			BackpackItem.saveItems(result, BackpackItem.loadItems(incoming));
 		}

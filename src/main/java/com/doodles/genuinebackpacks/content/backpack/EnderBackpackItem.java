@@ -4,13 +4,10 @@ import com.doodles.genuinebackpacks.GenuineBackpacks;
 import com.doodles.genuinebackpacks.content.backpack.gui.EnderBackpackMenu;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -18,7 +15,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
 
 public class EnderBackpackItem extends AbstractBackpackItem {
 
@@ -45,26 +41,18 @@ public class EnderBackpackItem extends AbstractBackpackItem {
 	}
 
 	public static void open(Level level, Player player, ItemStack pack, BlockPos pos) {
-		if (!level.isClientSide) {
-			PlayerEnderChestContainer enderchest = player.getEnderChestInventory();
-			if (enderchest != null) {
-				MenuProvider containerProvider = new MenuProvider() {
-		            @Override
-		            public Component getDisplayName() { return Component.translatable("container.genuinebackpacks.ender_backpack"); }
-		
-		            @Override
-		            public AbstractContainerMenu createMenu(int id, Inventory inv, Player playerEntity) {
-		                return new EnderBackpackMenu(id, playerEntity, pack, enderchest, ContainerLevelAccess.create(level, pos));
-		            }
-		        };
-				CompoundTag tag = pack.getOrCreateTagElement("display");
-				tag.putBoolean("open", true);
-				NetworkHooks.openScreen((ServerPlayer) player, containerProvider);
-			}
+		PlayerEnderChestContainer enderchest = player.getEnderChestInventory();
+		if (enderchest != null) {
+			MenuProvider containerProvider = new MenuProvider() {
+	            @Override
+	            public Component getDisplayName() { return Component.translatable("container.genuinebackpacks.ender_backpack"); }
+	
+	            @Override
+	            public AbstractContainerMenu createMenu(int id, Inventory inv, Player playerEntity) {
+	                return new EnderBackpackMenu(id, playerEntity, pack, enderchest, ContainerLevelAccess.create(level, pos));
+	            }
+	        };
+	        AbstractBackpackItem.open(level, player, pack, containerProvider);
 		}
-	}
-
-	public static boolean wornBy(Player player) {
-		return player.getItemBySlot(EquipmentSlot.CHEST).is(GenuineBackpacks.ENDER_BACKPACK.get());
 	}
 }

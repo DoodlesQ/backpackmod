@@ -1,182 +1,182 @@
 {
   "variants": {
-    "easter_egg=0,ender=false,facing=east,mounted=false": {
-      "model": "genuinebackpacks:block/backpack",
-      "y": 270
-    },
-    "easter_egg=0,ender=false,facing=east,mounted=true": {
-      "model": "genuinebackpacks:block/backpack_mounted",
-      "y": 270
-    },
-    "easter_egg=0,ender=false,facing=north,mounted=false": {
-      "model": "genuinebackpacks:block/backpack",
-      "y": 180
-    },
-    "easter_egg=0,ender=false,facing=north,mounted=true": {
-      "model": "genuinebackpacks:block/backpack_mounted",
-      "y": 180
-    },
-    "easter_egg=0,ender=false,facing=south,mounted=false": {
-      "model": "genuinebackpacks:block/backpack"
-    },
-    "easter_egg=0,ender=false,facing=south,mounted=true": {
-      "model": "genuinebackpacks:block/backpack_mounted"
-    },
-    "easter_egg=0,ender=false,facing=west,mounted=false": {
-      "model": "genuinebackpacks:block/backpack",
-      "y": 90
-    },
-    "easter_egg=0,ender=false,facing=west,mounted=true": {
-      "model": "genuinebackpacks:block/backpack_mounted",
-      "y": 90
-    },
-    "easter_egg=0,ender=true,facing=east,mounted=false": {
-      "model": "genuinebackpacks:block/ender_backpack",
-      "y": 270
-    },
-    "easter_egg=0,ender=true,facing=east,mounted=true": {
-      "model": "genuinebackpacks:block/ender_backpack_mounted",
-      "y": 270
-    },
-    "easter_egg=0,ender=true,facing=north,mounted=false": {
-      "model": "genuinebackpacks:block/ender_backpack",
-      "y": 180
-    },
-    "easter_egg=0,ender=true,facing=north,mounted=true": {
-      "model": "genuinebackpacks:block/ender_backpack_mounted",
-      "y": 180
-    },
-    "easter_egg=0,ender=true,facing=south,mounted=false": {
-      "model": "genuinebackpacks:block/ender_backpack"
-    },
-    "easter_egg=0,ender=true,facing=south,mounted=true": {
-      "model": "genuinebackpacks:block/ender_backpack_mounted"
-    },
-    "easter_egg=0,ender=true,facing=west,mounted=false": {
-      "model": "genuinebackpacks:block/ender_backpack",
-      "y": 90
-    },
-    "easter_egg=0,ender=true,facing=west,mounted=true": {
-      "model": "genuinebackpacks:block/ender_backpack_mounted",
-      "y": 90
-    },
-    "easter_egg=1,ender=false,facing=east,mounted=false": {
-      "model": "genuinebackpacks:block/easter_egg",
-      "y": 270
-    },
-    "easter_egg=1,ender=false,facing=east,mounted=true": {
-      "model": "genuinebackpacks:block/easter_egg_mounted",
-      "y": 270
-    },
-    "easter_egg=1,ender=false,facing=north,mounted=false": {
-      "model": "genuinebackpacks:block/easter_egg",
-      "y": 180
-    },
-    "easter_egg=1,ender=false,facing=north,mounted=true": {
-      "model": "genuinebackpacks:block/easter_egg_mounted",
-      "y": 180
-    },
-    "easter_egg=1,ender=false,facing=south,mounted=false": {
-      "model": "genuinebackpacks:block/easter_egg"
-    },
-    "easter_egg=1,ender=false,facing=south,mounted=true": {
-      "model": "genuinebackpacks:block/easter_egg_mounted"
-    },
-    "easter_egg=1,ender=false,facing=west,mounted=false": {
-      "model": "genuinebackpacks:block/easter_egg",
-      "y": 90
-    },
-    "easter_egg=1,ender=false,facing=west,mounted=true": {
-      "model": "genuinebackpacks:block/easter_egg_mounted",
-      "y": 90
-    },
-    "easter_egg=1,ender=true,facing=east,mounted=false": {
-      "model": "genuinebackpacks:block/ender_backpack",
-      "y": 270
-    },
-    "easter_egg=1,ender=true,facing=east,mounted=true": {
-      "model": "genuinebackpacks:block/ender_backpack_mounted",
-      "y": 270
-    },
-    "easter_egg=1,ender=true,facing=north,mounted=false": {
-      "model": "genuinebackpacks:block/ender_backpack",
-      "y": 180
-    },
-    "easter_egg=1,ender=true,facing=north,mounted=true": {
-      "model": "genuinebackpacks:block/ender_backpack_mounted",
-      "y": 180
-    },
-    "easter_egg=1,ender=true,facing=south,mounted=false": {
-      "model": "genuinebackpacks:block/ender_backpack"
-    },
-    "easter_egg=1,ender=true,facing=south,mounted=true": {
-      "model": "genuinebackpacks:block/ender_backpack_mounted"
-    },
-    "easter_egg=1,ender=true,facing=west,mounted=false": {
-      "model": "genuinebackpacks:block/ender_backpack",
-      "y": 90
-    },
-    "easter_egg=1,ender=true,facing=west,mounted=true": {
-      "model": "genuinebackpacks:block/ender_backpack_mounted",
-      "y": 90
-    },
-    "easter_egg=2,ender=false,facing=east,mounted=false": {
+    "ender=false,facing=east,mounted=false,special=bee": {
       "model": "genuinebackpacks:block/bee",
       "y": 270
     },
-    "easter_egg=2,ender=false,facing=east,mounted=true": {
+    "ender=false,facing=east,mounted=false,special=none": {
+      "model": "genuinebackpacks:block/backpack",
+      "y": 270
+    },
+    "ender=false,facing=east,mounted=false,special=trans": {
+      "model": "genuinebackpacks:block/easter_egg",
+      "y": 270
+    },
+    "ender=false,facing=east,mounted=true,special=bee": {
       "model": "genuinebackpacks:block/bee_mounted",
       "y": 270
     },
-    "easter_egg=2,ender=false,facing=north,mounted=false": {
+    "ender=false,facing=east,mounted=true,special=none": {
+      "model": "genuinebackpacks:block/backpack_mounted",
+      "y": 270
+    },
+    "ender=false,facing=east,mounted=true,special=trans": {
+      "model": "genuinebackpacks:block/easter_egg_mounted",
+      "y": 270
+    },
+    "ender=false,facing=north,mounted=false,special=bee": {
       "model": "genuinebackpacks:block/bee",
       "y": 180
     },
-    "easter_egg=2,ender=false,facing=north,mounted=true": {
+    "ender=false,facing=north,mounted=false,special=none": {
+      "model": "genuinebackpacks:block/backpack",
+      "y": 180
+    },
+    "ender=false,facing=north,mounted=false,special=trans": {
+      "model": "genuinebackpacks:block/easter_egg",
+      "y": 180
+    },
+    "ender=false,facing=north,mounted=true,special=bee": {
       "model": "genuinebackpacks:block/bee_mounted",
       "y": 180
     },
-    "easter_egg=2,ender=false,facing=south,mounted=false": {
+    "ender=false,facing=north,mounted=true,special=none": {
+      "model": "genuinebackpacks:block/backpack_mounted",
+      "y": 180
+    },
+    "ender=false,facing=north,mounted=true,special=trans": {
+      "model": "genuinebackpacks:block/easter_egg_mounted",
+      "y": 180
+    },
+    "ender=false,facing=south,mounted=false,special=bee": {
       "model": "genuinebackpacks:block/bee"
     },
-    "easter_egg=2,ender=false,facing=south,mounted=true": {
+    "ender=false,facing=south,mounted=false,special=none": {
+      "model": "genuinebackpacks:block/backpack"
+    },
+    "ender=false,facing=south,mounted=false,special=trans": {
+      "model": "genuinebackpacks:block/easter_egg"
+    },
+    "ender=false,facing=south,mounted=true,special=bee": {
       "model": "genuinebackpacks:block/bee_mounted"
     },
-    "easter_egg=2,ender=false,facing=west,mounted=false": {
+    "ender=false,facing=south,mounted=true,special=none": {
+      "model": "genuinebackpacks:block/backpack_mounted"
+    },
+    "ender=false,facing=south,mounted=true,special=trans": {
+      "model": "genuinebackpacks:block/easter_egg_mounted"
+    },
+    "ender=false,facing=west,mounted=false,special=bee": {
       "model": "genuinebackpacks:block/bee",
       "y": 90
     },
-    "easter_egg=2,ender=false,facing=west,mounted=true": {
+    "ender=false,facing=west,mounted=false,special=none": {
+      "model": "genuinebackpacks:block/backpack",
+      "y": 90
+    },
+    "ender=false,facing=west,mounted=false,special=trans": {
+      "model": "genuinebackpacks:block/easter_egg",
+      "y": 90
+    },
+    "ender=false,facing=west,mounted=true,special=bee": {
       "model": "genuinebackpacks:block/bee_mounted",
       "y": 90
     },
-    "easter_egg=2,ender=true,facing=east,mounted=false": {
+    "ender=false,facing=west,mounted=true,special=none": {
+      "model": "genuinebackpacks:block/backpack_mounted",
+      "y": 90
+    },
+    "ender=false,facing=west,mounted=true,special=trans": {
+      "model": "genuinebackpacks:block/easter_egg_mounted",
+      "y": 90
+    },
+    "ender=true,facing=east,mounted=false,special=bee": {
       "model": "genuinebackpacks:block/ender_backpack",
       "y": 270
     },
-    "easter_egg=2,ender=true,facing=east,mounted=true": {
+    "ender=true,facing=east,mounted=false,special=none": {
+      "model": "genuinebackpacks:block/ender_backpack",
+      "y": 270
+    },
+    "ender=true,facing=east,mounted=false,special=trans": {
+      "model": "genuinebackpacks:block/ender_backpack",
+      "y": 270
+    },
+    "ender=true,facing=east,mounted=true,special=bee": {
       "model": "genuinebackpacks:block/ender_backpack_mounted",
       "y": 270
     },
-    "easter_egg=2,ender=true,facing=north,mounted=false": {
+    "ender=true,facing=east,mounted=true,special=none": {
+      "model": "genuinebackpacks:block/ender_backpack_mounted",
+      "y": 270
+    },
+    "ender=true,facing=east,mounted=true,special=trans": {
+      "model": "genuinebackpacks:block/ender_backpack_mounted",
+      "y": 270
+    },
+    "ender=true,facing=north,mounted=false,special=bee": {
       "model": "genuinebackpacks:block/ender_backpack",
       "y": 180
     },
-    "easter_egg=2,ender=true,facing=north,mounted=true": {
+    "ender=true,facing=north,mounted=false,special=none": {
+      "model": "genuinebackpacks:block/ender_backpack",
+      "y": 180
+    },
+    "ender=true,facing=north,mounted=false,special=trans": {
+      "model": "genuinebackpacks:block/ender_backpack",
+      "y": 180
+    },
+    "ender=true,facing=north,mounted=true,special=bee": {
       "model": "genuinebackpacks:block/ender_backpack_mounted",
       "y": 180
     },
-    "easter_egg=2,ender=true,facing=south,mounted=false": {
+    "ender=true,facing=north,mounted=true,special=none": {
+      "model": "genuinebackpacks:block/ender_backpack_mounted",
+      "y": 180
+    },
+    "ender=true,facing=north,mounted=true,special=trans": {
+      "model": "genuinebackpacks:block/ender_backpack_mounted",
+      "y": 180
+    },
+    "ender=true,facing=south,mounted=false,special=bee": {
       "model": "genuinebackpacks:block/ender_backpack"
     },
-    "easter_egg=2,ender=true,facing=south,mounted=true": {
+    "ender=true,facing=south,mounted=false,special=none": {
+      "model": "genuinebackpacks:block/ender_backpack"
+    },
+    "ender=true,facing=south,mounted=false,special=trans": {
+      "model": "genuinebackpacks:block/ender_backpack"
+    },
+    "ender=true,facing=south,mounted=true,special=bee": {
       "model": "genuinebackpacks:block/ender_backpack_mounted"
     },
-    "easter_egg=2,ender=true,facing=west,mounted=false": {
+    "ender=true,facing=south,mounted=true,special=none": {
+      "model": "genuinebackpacks:block/ender_backpack_mounted"
+    },
+    "ender=true,facing=south,mounted=true,special=trans": {
+      "model": "genuinebackpacks:block/ender_backpack_mounted"
+    },
+    "ender=true,facing=west,mounted=false,special=bee": {
       "model": "genuinebackpacks:block/ender_backpack",
       "y": 90
     },
-    "easter_egg=2,ender=true,facing=west,mounted=true": {
+    "ender=true,facing=west,mounted=false,special=none": {
+      "model": "genuinebackpacks:block/ender_backpack",
+      "y": 90
+    },
+    "ender=true,facing=west,mounted=false,special=trans": {
+      "model": "genuinebackpacks:block/ender_backpack",
+      "y": 90
+    },
+    "ender=true,facing=west,mounted=true,special=bee": {
+      "model": "genuinebackpacks:block/ender_backpack_mounted",
+      "y": 90
+    },
+    "ender=true,facing=west,mounted=true,special=none": {
+      "model": "genuinebackpacks:block/ender_backpack_mounted",
+      "y": 90
+    },
+    "ender=true,facing=west,mounted=true,special=trans": {
       "model": "genuinebackpacks:block/ender_backpack_mounted",
       "y": 90
     }

@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -40,7 +40,7 @@ public class BackpackBlock extends Block implements EntityBlock {
  	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
  	public static final BooleanProperty MOUNTED = BooleanProperty.create("mounted");
  	public static final BooleanProperty ENDER = BooleanProperty.create("ender");
- 	public static final IntegerProperty EGG = IntegerProperty.create("easter_egg", 0, BackpackItem.SPECIAL);
+ 	public static final EnumProperty<BackpackItem.Special> SPECIAL = EnumProperty.create("special", BackpackItem.Special.class);
     private static final VoxelShape SHAPE = Block.box( 4.0D,  0.0D,  4.0D, 12.0D, 11.0D, 12.0D);
     private static final Map<Direction,VoxelShape> MOUNTSHAPE = Map.ofEntries(
 		entry(Direction.SOUTH, Block.box( 4.0D,  2.0D,  9.0D, 12.0D, 13.0D, 16.0D)),
@@ -58,8 +58,9 @@ public class BackpackBlock extends Block implements EntityBlock {
         pBuilder.add(FACING);
         pBuilder.add(MOUNTED);
         pBuilder.add(ENDER);
-        pBuilder.add(EGG);
+        pBuilder.add(SPECIAL);
     }
+    
 	@Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
 		if (context.getClickedFace() == Direction.DOWN) return null;
@@ -70,7 +71,7 @@ public class BackpackBlock extends Block implements EntityBlock {
 		ItemStack held = context.getItemInHand();
 		BlockState state = this.defaultBlockState()
 			.setValue(ENDER, held.is(GenuineBackpacks.ENDER_BACKPACK.get()))
-			.setValue(EGG, BackpackItem.getSpecial(held));
+			.setValue(SPECIAL, BackpackItem.getSpecial(held));
 		boolean doMount = clicked != Direction.DOWN;
 		if (!doMount) {
 			state = state.setValue(FACING, facing).setValue(MOUNTED, false);
@@ -79,11 +80,13 @@ public class BackpackBlock extends Block implements EntityBlock {
 		}
 		return state;
 	}
+	
 	// Assign hitbox model
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return state.getValue(MOUNTED) ? MOUNTSHAPE.get(state.getValue(FACING)) : SHAPE;
 	}
+	// Reject invalid placements
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 	      Direction direction = state.getValue(MOUNTED) ? state.getValue(FACING) : Direction.DOWN;
 	      return Block.canSupportCenter(level, pos.relative(direction), direction.getOpposite());
@@ -117,9 +120,9 @@ public class BackpackBlock extends Block implements EntityBlock {
 		return backpack;
 	}
 	public static ItemStack getDefaultPack(BlockState state) {
-		return getDefaultPack(state.getValue(ENDER), state.getValue(EGG));
+		return getDefaultPack(state.getValue(ENDER), state.getValue(SPECIAL));
 	}
-	public static ItemStack getDefaultPack(boolean ender, int egg) {
+	public static ItemStack getDefaultPack(boolean ender, BackpackItem.Special egg) {
 		ItemStack backpack = new ItemStack(packType(ender));
 		BackpackItem.setSpecial(backpack, egg);
 		return backpack;
@@ -155,6 +158,7 @@ public class BackpackBlock extends Block implements EntityBlock {
 		return new ItemStack(packType(state));
     }
     
+    // Generate ender particles for ender backpacks
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
     	if (state.getValue(ENDER)) {
 	        for (int i = 0; i < 3; ++i) {

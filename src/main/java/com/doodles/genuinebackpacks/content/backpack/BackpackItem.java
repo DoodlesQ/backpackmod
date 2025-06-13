@@ -11,11 +11,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -27,18 +26,26 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.network.NetworkHooks;
 
 public class BackpackItem extends AbstractBackpackItem implements DyeableLeatherItem {
 	
-	public static final int TINY = 0;
-	public static final int MEDIUM = 1;
-	public static final int LARGE = 2;
-	public static final int[] POCKET_SIZE = {3, 3 ,2};
-	public static final String[] POCKET_NAME = {"tiny", "medium", "large"};
-	public static final int TRANS = 1;
-	public static final int BEE = 2;
-	public static final int SPECIAL = 2;
+	public enum PocketType {
+		SMALL(3),
+		MEDIUM(3),
+		LARGE(2);
+		private final int max;
+		private PocketType(int max) { this.max = max; }
+		public int getMax() { return this.max; }
+	}
+	public enum Special implements StringRepresentable {
+		NONE("none"),
+		TRANS("trans"),
+		BEE("bee");
+		private final String name;
+		private Special(String name) { this.name = name; }
+		@Override
+		public String getSerializedName() { return this.name; }
+	}
     
 	public BackpackItem(Properties properties) {
 		super(GenuineBackpacks.BACKPACK_BLOCK.get(), properties);
@@ -50,10 +57,10 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
 	}
 	
 	public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
-		BackpackItem.setSpecial(stack, 0);
+		BackpackItem.setSpecial(stack, Special.NONE);
 		Component name = stack.getHoverName();
-		if (name.getString().equalsIgnoreCase("Beepack")) BackpackItem.setSpecial(stack, BEE);
-		if (name.getString().equalsIgnoreCase("Trans Rights")) BackpackItem.setSpecial(stack, TRANS);
+		if (name.getString().equalsIgnoreCase("Beepack")) BackpackItem.setSpecial(stack, Special.BEE);
+		if (name.getString().equalsIgnoreCase("Trans Rights")) BackpackItem.setSpecial(stack, Special.TRANS);
 		super.onInventoryTick(stack, level, player, slotIndex, selectedIndex);
 	}
 	
@@ -62,8 +69,8 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
 		switch (BackpackItem.getSpecial(stack)) {
 			case BEE: 	return Rarity.UNCOMMON;
 			case TRANS: return Rarity.RARE;
+			default:	return super.getRarity(stack);
 		}
-		return super.getRarity(stack);
 	}
 	
 	@Override
@@ -80,29 +87,23 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
 	public static void open(Level level, Player player, ItemStack pack) {
 		open(level, player, pack, player.blockPosition());
 	}
-	
 	public static void open(Level level, Player player, ItemStack pack, BlockPos pos) {
-		if (!level.isClientSide) {
-			MenuProvider containerProvider = new MenuProvider() {
-	            @Override
-	            public Component getDisplayName() { return pack.getHoverName(); }
-	
-	            @Override
-	            public AbstractContainerMenu createMenu(int windowId, Inventory __, Player playerEntity) {
-	                return new BackpackMenu(windowId, playerEntity, pack, ContainerLevelAccess.create(level, pos));
-	            }
-	        };
-			CompoundTag tag = pack.getOrCreateTagElement("display");
-			tag.putBoolean("open", true);
-	        NetworkHooks.openScreen((ServerPlayer) player, containerProvider, buf -> buf.writeItemStack(pack, false));
-		}
+		MenuProvider containerProvider = new MenuProvider() {
+            @Override
+            public Component getDisplayName() { return pack.getHoverName(); }
+
+            @Override
+            public AbstractContainerMenu createMenu(int windowId, Inventory __, Player playerEntity) {
+                return new BackpackMenu(windowId, playerEntity, pack, ContainerLevelAccess.create(level, pos));
+            }
+        };
+		AbstractBackpackItem.open(level, player, pack, containerProvider);
 	}
 	
 	public static void saveItems (ItemStack stack, ItemStackHandler handler) {
 		CompoundTag tag = stack.getOrCreateTagElement("inventory");
 		tag.put("items", handler.serializeNBT());
 	}
-	
 	public static ItemStackHandler loadItems (ItemStack stack) {
 		CompoundTag tag = stack.getTagElement("inventory");
 		ItemStackHandler out = new ItemStackHandler(63);
@@ -112,9 +113,9 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
 	
 	@Override
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-		int t = getPockets(stack, TINY);
-		int m = getPockets(stack, MEDIUM);
-		int l = getPockets(stack, LARGE);
+		int t = getPockets(stack, PocketType.SMALL);
+		int m = getPockets(stack, PocketType.MEDIUM);
+		int l = getPockets(stack, PocketType.LARGE);
 		int slots = getTotalSlots(stack);
 		int[] data = getFilled(loadItems(stack));
 		CompoundTag tag = stack.getTagElement("display");
@@ -140,35 +141,26 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
 		return data;
 	}
 	
-	public ItemStack getDyed(DyeColor dye) {
-		return getDyed(extractColor(dye));
-	}
-	public ItemStack getDyed(int hexcolor) {
-		ItemStack dyed = new ItemStack(this);
-		int r = Math.min((hexcolor&0xFF)+0x10, 0xFF);
-		int g = Math.min(((hexcolor>>8)&0xFF)+0x10, 0xFF)<<8;
-		int b = Math.min(((hexcolor>>16)&0xFF)+0x10, 0xFF)<<16;
-		this.setColor(dyed, r+g+b);//Math.min(hexcolor, 0x303030));
-		return dyed;
-	}
-	
 	@Override
 	public void setColor(ItemStack stack, int color) {
+		setDye(stack, color);
+	}
+	public static void setDye(ItemStack stack, int color) {
 		CompoundTag flag = stack.getOrCreateTag();
 		flag.putInt("HideFlags", ItemStack.TooltipPart.DYE.getMask());
 	    stack.getOrCreateTagElement("display").putInt("color", color);
 	}
-	
+
 	@Override
 	public int getColor(ItemStack stack) {
-		return getColor(stack, true);
+		return getDye(stack);
 	}
-	
-	public static int getColor(ItemStack stack, boolean verify) {
+	public static int getDye(ItemStack stack) {
 		CompoundTag tag = stack.getTagElement("display");
-		return !verify || (tag != null && tag.contains("color", 99)) ? tag.getInt("color") : 0xd15d4d;
+		return (tag != null && tag.contains("color", 99)) ? tag.getInt("color") : 0xd15d4d;
 	}
 	
+	// Convert a DyeColor into a integer color value
 	public static int extractColor(DyeColor color) {
 		float[] tdc = color.getTextureDiffuseColors();
 		int r = (int) (tdc[0] * 255.0f);
@@ -180,46 +172,40 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
 	
 	public static boolean hasPockets(ItemStack stack) {
 		CompoundTag tag = stack.getTagElement("pockets");
-		return hasPockets(stack, TINY, tag) || hasPockets(stack, MEDIUM, tag) || hasPockets(stack, LARGE, tag);
+		return hasPockets(tag, PocketType.SMALL) || hasPockets(tag, PocketType.MEDIUM) || hasPockets(tag, PocketType.LARGE);
 	}
-	public static boolean hasPockets(ItemStack stack, int type) {
+	public static boolean hasPockets(ItemStack stack, PocketType type) {
 		CompoundTag tag = stack.getTagElement("pockets");
-		return hasPockets(stack, type, tag);
+		return hasPockets(tag, type);
 	}
-	private static boolean hasPockets(ItemStack stack, int type, CompoundTag tag) {
-		return tag != null && tag.contains(POCKET_NAME[type], 99);
+	private static boolean hasPockets(CompoundTag tag, PocketType type) {
+		return tag != null && tag.contains(type.name(), 99);
 	}
 	
-	public static int getPockets(ItemStack stack, int type) {
+	public static int getPockets(ItemStack stack, PocketType type) {
 		CompoundTag tag = stack.getTagElement("pockets");
-		return hasPockets(stack, type, tag) ? tag.getInt(POCKET_NAME[type]) : 0;
+		return hasPockets(tag, type) ? tag.getInt(type.name()) : 0;
 	}
 	
-	public static void setPockets(ItemStack stack, int type, int n) {
-		stack.getOrCreateTagElement("pockets").putInt(POCKET_NAME[type], n);
+	public static void setPockets(ItemStack stack, PocketType type, int n) {
+		stack.getOrCreateTagElement("pockets").putInt(type.name(), n);
 	}
-	public static void addPocket(ItemStack stack, int type) {
-		setPockets(stack, type, Math.min(getPockets(stack, type)+1, POCKET_SIZE[type]));
+	public static void addPocket(ItemStack stack, PocketType type) {
+		setPockets(stack, type, Math.min(getPockets(stack, type)+1, type.getMax()));
 	}
 	
-	public static void setSpecial(ItemStack stack, int v) {
-		stack.getOrCreateTagElement("egg").putInt("type", v);
+	public static void setSpecial(ItemStack stack, Special v) {
+		stack.getOrCreateTagElement("egg").putString("type", v.name());
 	}
-	public static int getSpecial(ItemStack stack) {
+	public static Special getSpecial(ItemStack stack) {
 		CompoundTag tag = stack.getTagElement("egg");
-		return (tag != null && tag.contains("type")) ? tag.getInt("type") : 0;
+		return (tag != null && tag.contains("type")) ? Special.valueOf(tag.getString("type")) : Special.NONE;
 	}
-	
 	
 	public static int getTotalSlots(ItemStack stack) {
-		int tinyCount = getPockets(stack, TINY);
-		int mediCount = getPockets(stack, MEDIUM);
-		int largCount = getPockets(stack, LARGE);
+		int tinyCount = getPockets(stack, PocketType.SMALL);
+		int mediCount = getPockets(stack, PocketType.SMALL);
+		int largCount = getPockets(stack, PocketType.SMALL);
 		return 18+tinyCount*3+mediCount*6+largCount*9;
 	}
-	
-	public static boolean wornBy(Player player) {
-		return player.getItemBySlot(EquipmentSlot.CHEST).is(GenuineBackpacks.BACKPACK.get());
-	}
-
 }

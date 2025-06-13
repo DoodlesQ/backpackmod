@@ -30,26 +30,26 @@ public class BackpackLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
 
 	@Override
 	public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer player, float _0, float _1, float partialTick, float _3, float _4, float _5) {
-		if (BackpackItem.wornBy(player) || EnderBackpackItem.wornBy(player)) {
-			ItemStack backpack = player.getItemBySlot(EquipmentSlot.CHEST);
-			renderBackpack(poseStack, buffer, packedLight, player, partialTick, getParentModel(), backpack);
+		ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+		if (chest.is(GenuineBackpacks.BACKPACK.get()) || chest.is(GenuineBackpacks.ENDER_BACKPACK.get())) {
+			renderBackpack(poseStack, buffer, packedLight, player, partialTick, getParentModel(), chest);
 		}
 	}
 	
 	private void renderBackpack(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer player, float partialTick, HumanoidModel<AbstractClientPlayer> playerModel, ItemStack backpack) {
 
 		boolean ender = backpack.is(GenuineBackpacks.ENDER_BACKPACK.get());
-		int egg = BackpackItem.getSpecial(backpack);
+		BackpackItem.Special egg = BackpackItem.getSpecial(backpack);
 		BlockState blockState = GenuineBackpacks.BACKPACK_BLOCK.get().defaultBlockState()
 			.setValue(BackpackBlock.ENDER, ender)
-			.setValue(BackpackBlock.EGG, egg)
+			.setValue(BackpackBlock.SPECIAL, egg)
 			.setValue(BackpackBlock.MOUNTED, true);
 		
-		int color = (!ender && egg == 0) ? BackpackItem.getColor(backpack, true) : 0xffffff;
-		
-		float r = (color >> 16 & 255) / 255.0f;
-		float g = (color >>  8 & 255) / 255.0f;
-		float b = (color       & 255) / 255.0f;
+		int color = (!ender && egg == BackpackItem.Special.NONE) ? BackpackItem.getDye(backpack) : 0xffffff;
+		float[] rgb = {(color >> 16 & 255) / 255.0f,
+					   (color >>  8 & 255) / 255.0f,
+					   (color       & 255) / 255.0f
+					  };
 
 		playerModel.setupAnim((AbstractClientPlayer) player, 0f, 0f, partialTick, 0f, 0f);
 		
@@ -67,7 +67,7 @@ public class BackpackLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
 			buffer.getBuffer(RenderType.cutout()),
 			blockState,
 			blockModel,
-			r, g, b,
+			rgb[0], rgb[1], rgb[2],
 			packedLight,
 			OverlayTexture.NO_OVERLAY,
 			ModelData.EMPTY,

@@ -14,7 +14,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
@@ -53,20 +53,20 @@ public class GBRecipesProvider extends RecipeProvider {
 			.save(writer);
 		
 		//Backpacks
-		for (DyeItem dye : GenuineBackpacks.WOOL.keySet()) {
+		for (DyeColor dye : GenuineBackpacks.WOOL.keySet()) {
 			BackpackItem b = GenuineBackpacks.BACKPACK.get();
-			SewingRecipeBuilder.build(dye.getDyeColor().toString()+"_backpack", b)
+			SewingRecipeBuilder.build(dye.toString()+"_backpack", b)
 				.add(GenuineBackpacks.items.get("tanned_leather").get(), 5)
 				.add(GenuineBackpacks.WOOL.get(dye), 3)
-				.setDye(BackpackItem.extractColor(dye.getDyeColor()))
+				.setDye(BackpackItem.extractColor(dye))
 				.save(writer);
 		}
-		for (DyeItem dye : GenuineBackpacks.WOOL.keySet()) {
+		for (DyeColor dye : GenuineBackpacks.WOOL.keySet()) {
 			BackpackItem b = GenuineBackpacks.BACKPACK.get();
-			SewingRecipeBuilder.build(dye.getDyeColor().toString()+"_backpack_restitch", b)
+			SewingRecipeBuilder.build(dye.toString()+"_backpack_restitch", b)
 				.add(b, 1)
 				.add(GenuineBackpacks.WOOL.get(dye), 3)
-				.setDye(BackpackItem.extractColor(dye.getDyeColor()))
+				.setDye(BackpackItem.extractColor(dye))
 				.save(writer);
 		}
 		

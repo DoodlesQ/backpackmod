@@ -28,16 +28,17 @@ public class SewingRecipeSerializer implements RecipeSerializer<SewingRecipe> {
         }
         Ingredient result = null;
         if (GsonHelper.isValidNode(json, "packColor")) {
-        	BackpackItem pack = (BackpackItem) ShapedRecipe.itemFromJson(GsonHelper.getAsJsonObject(json, "result"));
-        	result = Ingredient.of(pack.getDyed(GsonHelper.getAsInt(json, "packColor")));
+        	ItemStack pack = new ItemStack(ShapedRecipe.itemFromJson(GsonHelper.getAsJsonObject(json, "result")));
+        	BackpackItem.setDye(pack, GsonHelper.getAsInt(json, "packColor"));
+        	result = Ingredient.of(pack);
         }
         if (GsonHelper.isValidNode(json, "pockets")) {
         	BackpackItem pack = (BackpackItem) ShapedRecipe.itemFromJson(GsonHelper.getAsJsonObject(json, "result"));
         	ItemStack stack = new ItemStack(pack);
         	int pockets = GsonHelper.getAsInt(json, "pockets");
-        	if ((pockets&1)==1) 	BackpackItem.addPocket(stack, BackpackItem.TINY);
-        	if ((pockets>>1&1)==1) 	BackpackItem.addPocket(stack, BackpackItem.MEDIUM);
-        	if ((pockets>>2&1)==1) 	BackpackItem.addPocket(stack, BackpackItem.LARGE);
+        	if ((pockets&1)==1) 	BackpackItem.addPocket(stack, BackpackItem.PocketType.SMALL);
+        	if ((pockets>>1&1)==1) 	BackpackItem.addPocket(stack, BackpackItem.PocketType.MEDIUM);
+        	if ((pockets>>2&1)==1) 	BackpackItem.addPocket(stack, BackpackItem.PocketType.LARGE);
         	result = Ingredient.of(stack);
         }
         if (result == null) result = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "result"));

@@ -14,12 +14,12 @@ public class BackpackTileEntity extends BlockEntity {
  	
 	public ItemStack backpack;
 	private boolean ender;
-	private int egg;
+	private BackpackItem.Special egg;
 
 	public BackpackTileEntity(BlockPos pos, BlockState state) {
 		super(GenuineBackpacks.BACKPACK_BLOCK_ENTITY.get(), pos, state);
 		this.ender = state.getValue(BackpackBlock.ENDER);
-		this.egg = state.getValue(BackpackBlock.EGG);
+		this.egg = state.getValue(BackpackBlock.SPECIAL);
 	}
 	
 	public void setBackpack(ItemStack backpack) {
@@ -34,11 +34,11 @@ public class BackpackTileEntity extends BlockEntity {
         	tag.put("backpack", packTag != null ? packTag : new CompoundTag());
         }
         tag.putBoolean("ender", this.ender);
-        tag.putInt("egg", this.egg);
+        tag.putString("egg", this.egg.name());
 	}
 	private void loadBackpack(CompoundTag tag) {
         if (tag.contains("ender")) this.ender = tag.getBoolean("ender");
-        if (tag.contains("egg")) this.egg = tag.getInt("egg");
+        if (tag.contains("egg")) this.egg = BackpackItem.Special.valueOf(tag.getString("egg"));
     	ItemStack backpack = BackpackBlock.getDefaultPack(this.ender, this.egg);
         if (tag.contains("backpack")) backpack.setTag(tag.getCompound("backpack"));
     	setBackpack(backpack);

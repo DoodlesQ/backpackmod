@@ -2,7 +2,6 @@ package com.doodles.genuinebackpacks.data;
 
 import com.doodles.genuinebackpacks.GenuineBackpacks;
 import com.doodles.genuinebackpacks.content.backpack.BackpackBlock;
-import com.doodles.genuinebackpacks.content.backpack.BackpackItem;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -35,10 +34,10 @@ public class GBBlockStateProvider extends BlockStateProvider {
 		String type  = state.getValue(BackpackBlock.ENDER) ? "ender_" : "";
 		String pack = "backpack";
 		if (!state.getValue(BackpackBlock.ENDER)) {
-			int egg = state.getValue(BackpackBlock.EGG);
-			switch(egg) {
-				case BackpackItem.TRANS: pack = "easter_egg"; break;
-				case BackpackItem.BEE:   pack = "bee"; break;
+			switch(state.getValue(BackpackBlock.SPECIAL)) {
+				case TRANS: pack = "easter_egg"; break;
+				case BEE:   pack = "bee"; break;
+				default:    break;
 			}
 		}
 		String mount = state.getValue(BackpackBlock.MOUNTED) ? "_mounted" : "";
