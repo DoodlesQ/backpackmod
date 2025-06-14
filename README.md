@@ -9,7 +9,6 @@ These backpacks can be freely colored and renamed, and can be upgraded to larger
 
 #### Integration
 - ![JEI]()
-- ![Curios]() *(Planned)*
 
 <hr>
 

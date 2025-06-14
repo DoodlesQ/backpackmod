@@ -78,7 +78,8 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
     	ItemStack i = player.getItemInHand(usedHand);
 		if (usedHand == InteractionHand.MAIN_HAND) {
 			if (player.isShiftKeyDown()) {
-				if (level.isClientSide) Minecraft.getInstance().setScreen(new BackpackRenameScreen(i, player, usedHand));
+				//if (level.isClientSide) Minecraft.getInstance().setScreen(new BackpackRenameScreen(i, player, usedHand));
+				if (level.isClientSide) OpenRenameScreen.openRenameScreen(i, player, usedHand); 
 			} else open(level, player, i);
 		}
 		return InteractionResultHolder.pass(i);
@@ -88,16 +89,18 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
 		open(level, player, pack, player.blockPosition());
 	}
 	public static void open(Level level, Player player, ItemStack pack, BlockPos pos) {
-		MenuProvider containerProvider = new MenuProvider() {
-            @Override
-            public Component getDisplayName() { return pack.getHoverName(); }
-
-            @Override
-            public AbstractContainerMenu createMenu(int windowId, Inventory __, Player playerEntity) {
-                return new BackpackMenu(windowId, playerEntity, pack, ContainerLevelAccess.create(level, pos));
-            }
-        };
-		AbstractBackpackItem.open(level, player, pack, containerProvider);
+		if (!level.isClientSide) {
+			MenuProvider containerProvider = new MenuProvider() {
+	            @Override
+	            public Component getDisplayName() { return pack.getHoverName(); }
+	
+	            @Override
+	            public AbstractContainerMenu createMenu(int windowId, Inventory __, Player playerEntity) {
+	                return new BackpackMenu(windowId, playerEntity, pack, ContainerLevelAccess.create(level, pos));
+	            }
+	        };
+	        AbstractBackpackItem.open(level, player, pack, containerProvider);
+		}
 	}
 	
 	public static void saveItems (ItemStack stack, ItemStackHandler handler) {
@@ -208,4 +211,11 @@ public class BackpackItem extends AbstractBackpackItem implements DyeableLeather
 		int largCount = getPockets(stack, PocketType.SMALL);
 		return 18+tinyCount*3+mediCount*6+largCount*9;
 	}
+	
+	private static class OpenRenameScreen {
+		public static void openRenameScreen(ItemStack i, Player player, InteractionHand hand) {
+			Minecraft.getInstance().setScreen(new BackpackRenameScreen(i, player, hand));
+		}
+	}
 }
+

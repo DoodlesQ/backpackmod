@@ -118,7 +118,7 @@ public class GenuineBackpacks
 	public static final RegistryObject<SoundEvent> SEWING_CRAFT_SOUND = SOUND_EVENTS.register("sewing_table", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(MODID, "sewing_table")));
 	
     // Etc Items
-	//NOTE: This is a stupid way to do this. Never do this.
+	//NOTE: This is a stupid way to do this. Don't do this.
 	@SuppressWarnings("serial")
 	public static final LinkedHashMap<String, RegistryObject<Item>> items = new LinkedHashMap<String, RegistryObject<Item>>() {{
 		put("spool",          	ITEMS.register("spool", 			() -> new Item(new Item.Properties())));
@@ -174,10 +174,6 @@ public class GenuineBackpacks
             }
             output.accept(ENDER_BACKPACK.get());
         }).build());
-    
-    // Keybinding
-    public static final Lazy<KeyMapping> BACKPACK_MAPPING = Lazy.of(() -> new KeyMapping(String.format("key.%s.backpack", MODID), KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, "key.categories.inventory"));
-
   
     @SuppressWarnings("removal")
 	public GenuineBackpacks() {    	
@@ -239,11 +235,6 @@ public class GenuineBackpacks
         	});
         }
         
-        @SubscribeEvent
-        public static void registerBindings(RegisterKeyMappingsEvent event) {
-        	event.register(BACKPACK_MAPPING.get());
-        }
-        
         // Tint Backpacks
         @SubscribeEvent
         public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
@@ -281,18 +272,32 @@ public class GenuineBackpacks
         		}
         	}
         }
+
+        // Keybinding
+        public static final Lazy<KeyMapping> BACKPACK_MAPPING = Lazy.of(() -> new KeyMapping(
+    		String.format("key.%s.backpack", MODID),
+    		KeyConflictContext.IN_GAME,
+    		InputConstants.Type.KEYSYM,
+    		GLFW.GLFW_KEY_B,
+    		"key.categories.inventory"
+		));
+        
+        @SubscribeEvent
+        public static void registerBindings(RegisterKeyMappingsEvent event) {
+        	event.register(BACKPACK_MAPPING.get());
+        }
     }
     
     @Mod.EventBusSubscriber(modid = MODID, bus = Bus.FORGE, value = Dist.CLIENT)
     public static class ClientForgeEvents {
         private static final Minecraft client = Minecraft.getInstance();
-
+        
         // Detect keybinding to open backpacks when worn
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {
         	if (client.player != null) {
 	        	if (event.phase == TickEvent.Phase.END) {	            
-	        		while (BACKPACK_MAPPING.get().consumeClick()) {
+	        		while (ClientModEvents.BACKPACK_MAPPING.get().consumeClick()) {
 	    	            LocalPlayer player = client.player;
 	        			ItemStack pack = ItemStack.EMPTY;
 	        			boolean ender = false;
